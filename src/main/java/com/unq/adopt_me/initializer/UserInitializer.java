@@ -1,6 +1,8 @@
 package com.unq.adopt_me.initializer;
 
 import com.unq.adopt_me.dao.UserDao;
+import com.unq.adopt_me.entity.user.Adopter;
+import com.unq.adopt_me.entity.user.Owner;
 import com.unq.adopt_me.entity.user.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -8,13 +10,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class UserInitializer implements Ordered {
 
     protected final Log logger = LogFactory.getLog(getClass());
@@ -35,12 +35,13 @@ public class UserInitializer implements Ordered {
 
     private void startInitialization() {
         for (int i = 0; i < emails.size(); i++) {
-            registerUser();
+            registerOwner();
+            registerAdopter();
         }
     }
-
-    public void registerUser() {
-        User user = new User();
+    @Transactional
+    public void registerOwner() {
+        Owner user = new Owner();
         user.setEmail(emails.get(getRandomIndex(emails.size())));
         user.setName(names.get(getRandomIndex(names.size())));
         user.setSurName(surNames.get(getRandomIndex(surNames.size())));
@@ -48,7 +49,19 @@ public class UserInitializer implements Ordered {
         user.setProvince(provinces.get(getRandomIndex(provinces.size())));
 
         userDao.save(user);
-        logger.info("User registered: " + user.getEmail());
+        logger.info("Owner registered: " + user.getEmail());
+    }
+    @Transactional
+    public void registerAdopter() {
+        Adopter user = new Adopter();
+        user.setEmail(emails.get(getRandomIndex(emails.size())));
+        user.setName(names.get(getRandomIndex(names.size())));
+        user.setSurName(surNames.get(getRandomIndex(surNames.size())));
+        user.setLocality(localities.get(getRandomIndex(localities.size())));
+        user.setProvince(provinces.get(getRandomIndex(provinces.size())));
+
+        userDao.save(user);
+        logger.info("Adopter registered: " + user.getEmail());
     }
 
     private int getRandomIndex(int size) {

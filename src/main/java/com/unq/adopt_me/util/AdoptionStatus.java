@@ -1,8 +1,8 @@
 package com.unq.adopt_me.util;
 
 public enum AdoptionStatus {
+    OPEN("Open"),
     PENDING("Pending"),
-    REJECTED("Rejected"),
     APPROVED("Approved");
 
     private final String value;

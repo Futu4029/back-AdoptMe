@@ -34,7 +34,7 @@ public class AdoptionServiceImpl implements AdoptionService {
             List<Adoption> adoptions = adoptionDao.findAllByOwner_Id(Long.parseLong(ownerId));
             List<AdoptionResponse> response = new ArrayList<>();
             if(!adoptions.isEmpty()){
-                response = adoptions.stream().map(AdoptionResponse::new).sorted().collect(Collectors.toList());
+                response = adoptions.stream().map(AdoptionResponse::new).collect(Collectors.toList());
             }
             return response;
         }catch (Exception e){

@@ -1,5 +1,6 @@
 package com.unq.adopt_me.initializer;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.unq.adopt_me.dao.AdoptionDao;
 import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.dao.UserDao;
@@ -43,24 +44,23 @@ public class ZAdoptionInitializer {
     }
 
     private void startInitialization() {
-        for (int i = 0; i < 2; i++) {
-            registerAdoption();
+        for (int i = 1; i < 4; i++) {
+            registerAdoption(Integer.toString(i));
         }
     }
 
-    public void registerAdoption() {
+    public void registerAdoption(String i) {
         Adoption adoption = new Adoption();
-        Long number = 1L;
-        User owner = userDao.findById(number).orElse(null);
-        Pet pet = petDao.findById(number).orElse(null);
-        number = number+1;
+        User owner = userDao.findById(Long.parseLong(i)).orElse(null);
+        Pet pet = petDao.findById(Long.parseLong(i)).orElse(null);
         if (owner != null && pet != null) {
             // Verificar si ya existe una adopción con el mismo owner y pet
             boolean exists = adoptionDao.existsByOwnerAndPet(owner, pet);
             if (!exists) {
+
                 adoption.setOwner(owner);
                 adoption.setPet(pet);
-                adoption.setStatus(statuses.get(getRandomIndex(statuses.size())));
+                adoption.setStatus(AdoptionStatus.PENDING.getValue());
 
                 adoptionDao.save(adoption);
                 logger.info("Adoption registered: " + adoption.getId());
@@ -73,9 +73,4 @@ public class ZAdoptionInitializer {
     private int getRandomIndex(int size) {
         return new Random().nextInt(size);
     }
-
-    private Long getRandomId(Long max) {
-        return (long) (Math.random() * max) + 1;
-    }
-
 }

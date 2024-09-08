@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PetDao extends JpaRepository<Pet, Long> {
 
-    Pet findPetByAdoption_Id(Long adoptionId);
 }
