@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 public class ErrorResponseDto {
 
     private String message;
-    private HttpStatus status;
+    private String status;
 
-    public ErrorResponseDto(String message, HttpStatus status) {
+    public ErrorResponseDto(String message, String status) {
         this.message = message;
         this.status = status;
     }

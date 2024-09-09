@@ -16,4 +16,11 @@ public class Adopter extends User{
     @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;  // Relación con múltiples aplicaciones
 
+    private Boolean livesOnHouse;
+    private Boolean isPropertyOwner;
+    private Boolean canHavePetsOnProperty;
+    private Boolean haveAnyPetsCastrated;
+    private String whatToDoIfHolydays;
+    private String whatToDoIfMoving;
+    private Boolean compromiseAccepted;
 }

@@ -9,7 +9,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponseDto> handleBusinessException(BusinessException ex) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(ex.getMessage(), ex.getHttpStatus());
+        ErrorResponseDto errorResponse = new ErrorResponseDto(ex.getMessage(), ex.getHttpStatus().getReasonPhrase());
         return new ResponseEntity<>(errorResponse, ex.getHttpStatus());
     }
 

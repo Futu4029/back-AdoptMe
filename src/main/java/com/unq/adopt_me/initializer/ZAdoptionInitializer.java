@@ -1,6 +1,5 @@
 package com.unq.adopt_me.initializer;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.unq.adopt_me.dao.AdoptionDao;
 import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.dao.UserDao;
@@ -13,12 +12,10 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +33,7 @@ public class ZAdoptionInitializer {
     @Autowired
     private PetDao petDao;  // Para asociar la mascota
 
-    private final List<String> statuses = Arrays.stream(AdoptionStatus.values()).map(AdoptionStatus::getValue).collect(Collectors.toList());
+    //private final List<String> statuses = Arrays.stream(AdoptionStatus.values()).map(AdoptionStatus::getValue).collect(Collectors.toList());
 
     @PostConstruct
     public void initialize() {
@@ -60,7 +57,7 @@ public class ZAdoptionInitializer {
 
                 adoption.setOwner(owner);
                 adoption.setPet(pet);
-                adoption.setStatus(AdoptionStatus.PENDING.getValue());
+                adoption.setStatus(AdoptionStatus.OPEN.getValue());
 
                 adoptionDao.save(adoption);
                 logger.info("Adoption registered: " + adoption.getId());
@@ -68,9 +65,5 @@ public class ZAdoptionInitializer {
                 logger.warn("Adoption already exists for owner: " + owner.getId() + " and pet: " + pet.getId());
             }
         }
-    }
-
-    private int getRandomIndex(int size) {
-        return new Random().nextInt(size);
     }
 }

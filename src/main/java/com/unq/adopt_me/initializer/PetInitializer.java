@@ -25,7 +25,7 @@ public class PetInitializer implements Ordered {
 
     private final List<String> names = List.of("Mila", "Calu", "Boni");
     private final List<String> types = List.of("Perro", "Gato");
-    private final List<String> sizes = List.of("Chico", "Mediano", "Grande");
+    private final List<String> sizes = List.of("Pequeño", "Mediano", "Grande");
     private final List<String> colors = List.of("Marron Claro", "Negro", "Blanco");
     private final List<String> breeds = List.of("Salchicha", "Collie", "Labrador");
 

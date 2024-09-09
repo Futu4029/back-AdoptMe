@@ -1,13 +1,10 @@
 package com.unq.adopt_me.controller;
 
-import com.unq.adopt_me.dto.adoption.AdoptionResponse;
 import com.unq.adopt_me.service.AdoptionService;
+import com.unq.adopt_me.common.GeneralResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @ControllerAdvice
@@ -19,7 +16,15 @@ public class AdoptionController {
     private AdoptionService adoptionService;
 
     @GetMapping("/{ownerId}")
-    public ResponseEntity<List<AdoptionResponse>> getAdoptionsByOwnerId(@PathVariable("ownerId")String ownerId){
-        return ResponseEntity.ok(adoptionService.getAdoptionsByOwnerId(ownerId));
+    public GeneralResponse getAdoptionsByOwnerId(@PathVariable("ownerId")String ownerId){
+        return adoptionService.getAdoptionsByOwnerId(ownerId);
+    }
+
+    @GetMapping("/search")
+    public GeneralResponse searchAdoptions(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String age,
+            @RequestParam(required = false) String size) {
+        return adoptionService.searchAdoption(type, age, size);
     }
 }

@@ -1,10 +1,9 @@
 package com.unq.adopt_me.service;
 
-import com.unq.adopt_me.dto.adoption.AdoptionResponse;
-
-import java.util.List;
+import com.unq.adopt_me.common.GeneralResponse;
 
 public interface AdoptionService {
 
-    List<AdoptionResponse> getAdoptionsByOwnerId(String email);
+    GeneralResponse getAdoptionsByOwnerId(String email);
+    GeneralResponse searchAdoption(String type, String age, String size);
 }

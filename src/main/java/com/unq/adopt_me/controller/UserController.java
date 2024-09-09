@@ -1,7 +1,7 @@
 package com.unq.adopt_me.controller;
 
 import com.unq.adopt_me.service.UserService;
-import com.unq.adopt_me.util.GeneralResponse;
+import com.unq.adopt_me.common.GeneralResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

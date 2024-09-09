@@ -21,6 +21,7 @@ public abstract class User {
     private String email;
     @NotBlank
     private String name;
+    @NotBlank
     private String surName;
     @NotBlank
     private String locality;

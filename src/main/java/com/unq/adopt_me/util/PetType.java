@@ -1,7 +1,28 @@
 package com.unq.adopt_me.util;
 
-public enum PetType {
+import com.unq.adopt_me.errorhandlers.BusinessException;
+import org.springframework.http.HttpStatus;
 
-    CAT,
-    DOG
+public enum PetType {
+    DOG("Perro"),
+    CAT("Gato");
+
+    private final String displayName;
+
+    PetType(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public static PetType getEnum(String name) {
+        for (PetType type : PetType.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        throw new BusinessException("No type found for parameter: " + name, HttpStatus.BAD_REQUEST);
+    }
 }
