@@ -24,7 +24,8 @@ public class AdoptionController {
     public GeneralResponse searchAdoptions(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String age,
-            @RequestParam(required = false) String size) {
-        return adoptionService.searchAdoption(type, age, size);
+            @RequestParam(required = false) String size,
+            @RequestParam(required = false) String gender) {
+        return adoptionService.searchAdoption(type, age, size, gender);
     }
 }

@@ -28,6 +28,7 @@ public class PetInitializer implements Ordered {
     private final List<String> sizes = List.of("Pequeño", "Mediano", "Grande");
     private final List<String> colors = List.of("Marron Claro", "Negro", "Blanco");
     private final List<String> breeds = List.of("Salchicha", "Collie", "Labrador");
+    private final List<String> gender = List.of("Macho", "Hembra");
 
     @PostConstruct
     public void initialize() {
@@ -48,6 +49,7 @@ public class PetInitializer implements Ordered {
         pet.setSize(sizes.get(i));
         pet.setColor(colors.get(getRandomIndex(colors.size())));
         pet.setBreed(breeds.get(i));
+        pet.setGender(gender.get(getRandomIndex(gender.size())));
         pet.setDescription("Descripción de " + pet.getName()); // Ajustar según sea necesario
 
         petDao.save(pet);

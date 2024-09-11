@@ -13,6 +13,7 @@ public class PetResponse {
     private String size;
     private String color;
     private String breed;
+    private String gender;
     private String image;
     private String description;
 
@@ -24,6 +25,7 @@ public class PetResponse {
         this.size = pet.getSize();
         this.color = pet.getColor();
         this.breed = pet.getBreed();
+        this.gender = pet.getGender();
         this.image = pet.getImage();
         this.description = pet.getDescription();
     }

@@ -1,14 +1,10 @@
 package com.unq.adopt_me.entity.pet;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
 
 @Entity
 @Table(name = "pets")
@@ -25,6 +21,7 @@ public class Pet {
     private String size;
     private String color;
     private String breed;
+    private String gender;
     private String image;
     private String description;
 
