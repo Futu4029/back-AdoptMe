@@ -41,7 +41,7 @@ public class ZAdoptionInitializer {
     }
 
     private void startInitialization() {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 5; i++) {
             registerAdoption(Integer.toString(i));
         }
     }

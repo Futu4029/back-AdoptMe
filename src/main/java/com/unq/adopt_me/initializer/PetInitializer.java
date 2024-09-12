@@ -45,6 +45,7 @@ public class PetInitializer implements Ordered {
         registerPet("Mila", 7, "Perro", "Pequeño", "Marron Claro", "Salchicha", "Hembra", "Descripción de Mila");
         registerPet("Calu", 1, "Perro", "Mediano", "Chocolate", "Mestizo", "Hembra", "Descripción de Calu");
         registerPet("Boni", 3, "Perro", "Grande", "Blanco", "Mestizo", "Macho", "Descripción de Boni");
+        registerPet("Tomy", 7, "Gato", "Mediano", "Blanco", "Mestizo", "Hembra", "Descripción de Tomy");
     }
 
     public void registerPetRandom(int i) {
@@ -72,6 +73,7 @@ public class PetInitializer implements Ordered {
         pet.setColor(color);
         pet.setBreed(breed);
         pet.setGender(gender);
+        pet.setImage("assets/"+pet.getName()+".jpeg");
         pet.setDescription(description);
 
         petDao.save(pet);
