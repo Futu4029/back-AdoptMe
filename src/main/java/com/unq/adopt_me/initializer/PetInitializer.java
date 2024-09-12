@@ -35,13 +35,19 @@ public class PetInitializer implements Ordered {
         startInitialization();
     }
 
-    private void startInitialization() {
+    private void startInitializationRandom() {
         for (int i = 0; i < 3; i++) {
-            registerPet(i);
+            registerPetRandom(i);
         }
     }
 
-    public void registerPet(int i) {
+    private void startInitialization() {
+        registerPet("Mila", 7, "Perro", "Pequeño", "Marron Claro", "Salchicha", "Hembra", "Descripción de Mila");
+        registerPet("Calu", 1, "Perro", "Mediano", "Chocolate", "Mestizo", "Hembra", "Descripción de Calu");
+        registerPet("Boni", 3, "Perro", "Grande", "Blanco", "Mestizo", "Macho", "Descripción de Boni");
+    }
+
+    public void registerPetRandom(int i) {
         Pet pet = new Pet();
         pet.setName(names.get(i));
         pet.setAge(getRandomAge());
@@ -51,6 +57,21 @@ public class PetInitializer implements Ordered {
         pet.setBreed(breeds.get(i));
         pet.setGender(gender.get(getRandomIndex(gender.size())));
         pet.setDescription("Descripción de " + pet.getName()); // Ajustar según sea necesario
+
+        petDao.save(pet);
+        logger.info("Pet registered: " + pet.getName());
+    }
+
+    public void registerPet(String name, int age, String type, String size, String color, String breed, String gender, String description) {
+        Pet pet = new Pet();
+        pet.setName(name);
+        pet.setAge(age);
+        pet.setType(type);
+        pet.setSize(size);
+        pet.setColor(color);
+        pet.setBreed(breed);
+        pet.setGender(gender);
+        pet.setDescription(description);
 
         petDao.save(pet);
         logger.info("Pet registered: " + pet.getName());
