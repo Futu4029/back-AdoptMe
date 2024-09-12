@@ -56,6 +56,7 @@ public class PetInitializer implements Ordered {
         pet.setColor(colors.get(getRandomIndex(colors.size())));
         pet.setBreed(breeds.get(i));
         pet.setGender(gender.get(getRandomIndex(gender.size())));
+        pet.setImage("assets/"+pet.getName()+".jpeg");
         pet.setDescription("Descripción de " + pet.getName()); // Ajustar según sea necesario
 
         petDao.save(pet);
