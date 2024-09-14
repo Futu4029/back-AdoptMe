@@ -23,6 +23,7 @@ public class Pet {
     private String breed;
     private String gender;
     private String image;
+    @Column(length = 500)
     private String description;
 
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
