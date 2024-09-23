@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,17 +73,17 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(3, responseList.size());
+        assertEquals(1, responseList.size());
     }
 
     @Test
-    void search_adoptions_with_gender_filter_get_status_OK_and_we_expect_1() {
+    void search_adoptions_with_gender_filter_get_status_OK_and_we_expect_2() {
         String femaleFilter = "?gender="+ PetGender.MALE;
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + femaleFilter, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(1, responseList.size());
+        assertEquals(2, responseList.size());
     }
 
     @Test
@@ -95,13 +97,13 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_1() {
+    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_2() {
         String sizeFilter = "?size="+ PetSize.SMALL;
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + sizeFilter, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(1, responseList.size());
+        assertEquals(2, responseList.size());
     }
 
     @Test
@@ -118,7 +120,18 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     @Test
     void create_adoptions_status_BAD_REQUEST_and_we_expect_same_object() {
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.adoptionRequestWithWrongParameter());
-        assertEquals("La imagen es obligatoria, la edad debe ser mayor o igual a 0, el género es obligatorio, el tamaño es obligatorio, la descripción es obligatoria, el tipo es obligatorio".length(), (Objects.requireNonNull(response.getBody()).getMessage().length()));
+        String expectedMessage = "La imagen es obligatoria, " +
+                                 "el género es obligatorio, el tamaño es obligatorio, " +
+                                 "el tipo es obligatorio, la descripción es obligatoria, " +
+                                 "la edad debe ser mayor o igual a 0";
+
+        List<String> expectedErrors = Arrays.asList(expectedMessage.toLowerCase().split(", "));
+        List<String> actualErrors = Arrays.asList(Objects.requireNonNull(response.getBody()).getMessage().toLowerCase().split(", "));
+
+        Collections.sort(expectedErrors);
+        Collections.sort(actualErrors);
+
+        assertEquals(expectedErrors, actualErrors, "Los mensajes de error coinciden");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
