@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserInitializer implements Ordered {
 
     protected final Log logger = LogFactory.getLog(getClass());
@@ -36,6 +37,7 @@ public class UserInitializer implements Ordered {
     private void startInitialization() {
         for (int i = 0; i < emails.size(); i++) {
             registerOwner();
+            registerAdopter("maria.lopez@gmail.com", "María","López", "Quilmes", "Buenos Aires");
             registerAdopter();
         }
     }
@@ -59,6 +61,18 @@ public class UserInitializer implements Ordered {
         user.setSurName(surNames.get(getRandomIndex(surNames.size())));
         user.setLocality(localities.get(getRandomIndex(localities.size())));
         user.setProvince(provinces.get(getRandomIndex(provinces.size())));
+
+        userDao.save(user);
+        logger.info("Adopter registered: " + user.getEmail());
+    }
+    @Transactional
+    public void registerAdopter(String email, String name, String surName, String localities, String provinces) {
+        Adopter user = new Adopter();
+        user.setEmail(email);
+        user.setName(name);
+        user.setSurName(surName);
+        user.setLocality(localities);
+        user.setProvince(provinces);
 
         userDao.save(user);
         logger.info("Adopter registered: " + user.getEmail());

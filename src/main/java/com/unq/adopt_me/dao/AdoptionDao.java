@@ -8,9 +8,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface AdoptionDao extends JpaRepository<Adoption, Long>, JpaSpecificationExecutor<Adoption> {
+public interface AdoptionDao extends JpaRepository<Adoption, UUID>, JpaSpecificationExecutor<Adoption> {
 
     List<Adoption> findAllByOwner_Id(Long owner_Id);
     boolean existsByOwnerAndPet(User owner, Pet pet);

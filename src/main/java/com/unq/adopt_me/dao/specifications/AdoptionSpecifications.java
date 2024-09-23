@@ -41,7 +41,7 @@ public class AdoptionSpecifications {
                 predicate = cb.and(predicate, cb.equal(root.get("pet").get("gender"), genderEnum.getDisplayName()));
             }
 
-            predicate = cb.and(predicate, cb.equal(root.get("status"), AdoptionStatus.OPEN.name()));
+            predicate = cb.and(predicate, cb.equal(root.get("status"), AdoptionStatus.OPEN.getValue()));
             return predicate;
         };
     }

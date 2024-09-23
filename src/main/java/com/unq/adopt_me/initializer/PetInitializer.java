@@ -3,13 +3,12 @@ package com.unq.adopt_me.initializer;
 import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.entity.pet.Pet;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
