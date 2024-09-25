@@ -18,6 +18,10 @@ public class AdoptionFactory {
         return new AdoptionRequest(anyPetDto(), "1");
     }
 
+    public static AdoptionRequest anyAdoptionWithPet_(PetDto petDto){
+        return new AdoptionRequest(petDto, "1");
+    }
+
     public static AdoptionRequest adoptionRequestWithWrongParameter(){
         return new AdoptionRequest(petDtoWithInvalidatedValues(), "1");
     }

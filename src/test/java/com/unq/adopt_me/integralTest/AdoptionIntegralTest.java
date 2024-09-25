@@ -8,6 +8,7 @@ import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.factory.AdoptionFactory;
+import com.unq.adopt_me.factory.PetFactory;
 import com.unq.adopt_me.util.PetAge;
 import com.unq.adopt_me.util.PetGender;
 import com.unq.adopt_me.util.PetSize;
@@ -118,11 +119,13 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void create_adoptions_status_BAD_REQUEST_and_we_expect_same_object() {
+    void create_adoptions_status_BAD_REQUEST_on_6_fields_and_we_expect_same_object() {
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.adoptionRequestWithWrongParameter());
-        String expectedMessage = "La imagen es obligatoria, " +
-                                 "el género es obligatorio, el tamaño es obligatorio, " +
-                                 "el tipo es obligatorio, la descripción es obligatoria, " +
+        String expectedMessage = "La imágen es obligatoria, " +
+                                 "el género es obligatorio, " +
+                                 "el tamaño es obligatorio, " +
+                                 "el tipo es obligatorio, " +
+                                 "la descripción es obligatoria, " +
                                  "la edad debe ser mayor o igual a 0";
 
         List<String> expectedErrors = Arrays.asList(expectedMessage.toLowerCase().split(", "));
@@ -132,6 +135,69 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
         Collections.sort(actualErrors);
 
         assertEquals(expectedErrors, actualErrors, "Los mensajes de error coinciden");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_age_is_under_zero() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNegativeAge()));
+        String expectedMessage = "La edad debe ser mayor o igual a 0";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_description() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoDescription()));
+        String expectedMessage = "La descripción es obligatoria";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_type() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoType()));
+        String expectedMessage = "El tipo es obligatorio";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_size() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoSize()));
+        String expectedMessage = "El tamaño es obligatorio";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_gender() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoGender()));
+        String expectedMessage = "El género es obligatorio";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_image() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoImage()));
+        String expectedMessage = "La imágen es obligatoria";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void create_adoptions_status_BAD_REQUEST_cause_have_no_name() {
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoName()));
+        String expectedMessage = "El nombre es obligatorio";
+
+        assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
