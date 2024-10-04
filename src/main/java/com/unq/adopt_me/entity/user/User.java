@@ -2,11 +2,14 @@ package com.unq.adopt_me.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.unq.adopt_me.entity.security.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -35,6 +38,15 @@ public abstract class User {
     private String locality;
     @NotBlank
     private String province;
+
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @Pattern(regexp = ".*[A-Z].*", message = "La contraseña debe contener al menos una letra mayúscula")
+    private String password;  // Campo para la contraseña
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+                        inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id_role"))
+    private List<Role> roles = new ArrayList<>();
 
     public User (){}
 
