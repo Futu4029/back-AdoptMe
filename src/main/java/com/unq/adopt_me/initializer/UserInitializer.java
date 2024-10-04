@@ -43,12 +43,12 @@ public class UserInitializer  {
     }
 
     private void startInitialization() {
+        initializeRoles();
         for (int i = 0; i < emails.size(); i++) {
-            initializeRoles();
             registerOwner();
-            registerAdopter("maria.lopez@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
             registerAdopter();
         }
+        registerAdopter("test.user@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
     }
 
     private void initializeRoles() {
@@ -78,7 +78,7 @@ public class UserInitializer  {
         user.setLocality(localities);
         user.setProvince(provinces);
         user.setPassword(password);
-       // user.setRoles(Collections.singletonList(new Role("ADMIN")));
+        user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
 
         userService.createUser(user);
         logger.info("Adopter registered: " + user.getEmail());
@@ -91,7 +91,7 @@ public class UserInitializer  {
         user.setLocality(localities.get(getRandomIndex(localities.size())));
         user.setProvince(provinces.get(getRandomIndex(provinces.size())));
         user.setPassword(PASS);
-       // user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
+        user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
     }
 
     private int getRandomIndex(int size) {
