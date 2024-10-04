@@ -1,9 +1,9 @@
 package com.unq.adopt_me.dto.pet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unq.adopt_me.entity.pet.Pet;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,9 +36,11 @@ public class PetDto {
     private String gender;
 
     @NotNull(message = "La imágen es obligatoria")
+    @NotBlank(message = "La imágen es obligatoria")
     private String image;
 
     @NotNull(message = "La descripción es obligatoria")
+    @NotBlank(message = "La descripción es obligatoria")
     private String description;
 
     public PetDto(String name, int age, String type, String size, String color, String breed, String gender, String image, String description) {
