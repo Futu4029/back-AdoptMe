@@ -5,6 +5,7 @@ import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.pet.Pet;
+import com.unq.adopt_me.entity.user.Owner;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.util.AdoptionStatus;
 import jakarta.annotation.PostConstruct;
@@ -37,8 +38,35 @@ public class ZAdoptionInitializer {
     }
 
     private void startInitialization() {
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 4; i++) {
             registerAdoption(Integer.toString(i));
+        }
+        registerAdoptionForLoginGuy();
+
+    }
+
+    private void registerAdoptionForLoginGuy() {
+        Owner owner = (Owner) userDao.findByEmail("test.user@gmail.com").orElse(null);
+        Pet pet = petDao.findById(4L).orElse(null);
+
+        if (owner != null && pet != null) {
+            // Comprobar si ya existe una adopción con el mismo owner y pet
+            boolean exists = adoptionDao.existsByOwnerAndPet(owner, pet);
+
+            if (!exists) {
+                Adoption adoption = new Adoption();
+                adoption.setOwner(owner);
+                adoption.setPet(pet);
+                adoption.setStatus(AdoptionStatus.OPEN.getValue());
+
+                // Aquí se espera que el owner adoptions se inicialice correctamente.
+                adoptionDao.save(adoption);
+                logger.info("Adoption registered: " + adoption.getId());
+            } else {
+                logger.warn("Adoption already exists for owner: " + owner.getId() + " and pet: " + pet.getId());
+            }
+        } else {
+            logger.warn("Owner or pet not found for email 'test.user@gmail.com' or pet ID '3'");
         }
     }
 

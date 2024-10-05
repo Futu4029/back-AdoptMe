@@ -22,7 +22,7 @@ public class AdoptionController {
         return adoptionService.getAdoptionsByOwnerId(ownerId);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/search/by-email/{email}")
     public GeneralResponse getAdoptionsByEmail(@PathVariable("email") String email){
         return adoptionService.getAdoptionsByEmail(email);
     }
