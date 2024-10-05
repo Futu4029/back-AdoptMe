@@ -1,6 +1,10 @@
 package com.unq.adopt_me.util;
 
+import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.errorhandlers.BusinessException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.http.HttpStatus;
 
 public enum PetAge {
@@ -16,7 +20,6 @@ public enum PetAge {
         this.maxAge = maxAge;
     }
 
-
     public int getMinAge() {
         return minAge;
     }
@@ -25,26 +28,13 @@ public enum PetAge {
         return maxAge;
     }
 
-    public boolean isInRange(int age) {
-        return age >= minAge && (maxAge == null || age <= maxAge);
-    }
-
     public static PetAge getEnum(String name) {
         for (PetAge filter : com.unq.adopt_me.util.PetAge.values()) {
             if (filter.name().equalsIgnoreCase(name)) {
                 return filter;
             }
         }
-        throw new BusinessException("No age found for parameter: " + name, HttpStatus.BAD_REQUEST);
+        return null;
     }
 
-    // Método para obtener el PetAge según la edad proporcionada
-    public static PetAge fromAge(int age) {
-        for (PetAge filter : com.unq.adopt_me.util.PetAge.values()) {
-            if (age >= filter.getMinAge() && age <= filter.getMaxAge()) {
-                return filter;
-            }
-        }
-        throw new BusinessException("No age found for parameter: " + age, HttpStatus.BAD_REQUEST);
-    }
 }

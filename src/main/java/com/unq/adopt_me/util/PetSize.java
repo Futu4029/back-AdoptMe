@@ -17,12 +17,13 @@ public enum PetSize {
     public String getDisplayName() {
         return displayName;
     }
+
     public static PetSize getEnum(String name) {
         for (PetSize size : PetSize.values()) {
             if (size.name().equalsIgnoreCase(name)) {
                 return size;
             }
         }
-        throw new BusinessException("No size found for parameter: " + name, HttpStatus.BAD_REQUEST);
+        return null;
     }
 }

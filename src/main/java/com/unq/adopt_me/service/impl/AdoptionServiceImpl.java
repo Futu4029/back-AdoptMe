@@ -97,7 +97,6 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
         logger.info("CREATE ADOPTION - Create adoption process started for pet [petName: {}] and user [userId: {}]", requestDto.getPetDto().getName(), requestDto.getUserId());
 
         try{
-
             Pet pet = new Pet(requestDto.getPetDto());
             User user = userDao.findById(Long.parseLong(requestDto.getUserId()))
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
