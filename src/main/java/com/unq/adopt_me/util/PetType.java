@@ -23,6 +23,6 @@ public enum PetType {
                 return type;
             }
         }
-        throw new BusinessException("No type found for parameter: " + name, HttpStatus.BAD_REQUEST);
+        return null;
     }
 }

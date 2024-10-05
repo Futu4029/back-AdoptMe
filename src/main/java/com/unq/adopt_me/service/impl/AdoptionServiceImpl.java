@@ -55,16 +55,35 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
         logger.info("GET ADOPTION - Getting adoptions by user: [ownerId: {}]", ownerId);
         try {
             List<Adoption> adoptions = adoptionDao.findAllByOwner_Id(Long.parseLong(ownerId));
-            List<AdoptionResponse> responseList = new ArrayList<>();
-            if(!adoptions.isEmpty()){
-                responseList = adoptions.stream().map(AdoptionResponse::new).collect(Collectors.toList());
-            }
+            List<AdoptionResponse> responseList = handleResponseList(adoptions);
 
             return generateResponse(SUCCESS_SEARCH_MESSAGE, responseList);
         }catch (Exception e){
             logger.error("ERROR - Getting adoption failed for user: [userId: {}] [errorMessage: {}]", ownerId, e.getMessage());
             throw new BusinessException("There was a problem getting the adoption for userId: "+ ownerId, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Override
+    public GeneralResponse getAdoptionsByEmail(String email) {
+        logger.info("GET ADOPTION - Getting adoptions by [email: {}]", email);
+        try {
+            List<Adoption> adoptions = adoptionDao.findAllByOwnerEmail(email);
+            List<AdoptionResponse> responseList = handleResponseList(adoptions);
+
+            return generateResponse(SUCCESS_SEARCH_MESSAGE, responseList);
+        }catch (Exception e){
+            logger.error("ERROR - Getting adoption failed for user: [email: {}] [errorMessage: {}]", email, e.getMessage());
+            throw new BusinessException("There was a problem getting the adoption for email: "+ email, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private static List<AdoptionResponse> handleResponseList(List<Adoption> adoptions) {
+        List<AdoptionResponse> responseList = new ArrayList<>();
+        if(!adoptions.isEmpty()){
+            responseList = adoptions.stream().map(AdoptionResponse::new).collect(Collectors.toList());
+        }
+        return responseList;
     }
 
     @Override
@@ -76,10 +95,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender);
             List<Adoption> adoptions = adoptionDao.findAll(spec, pageable).getContent();
 
-            List<AdoptionResponse> responseList = new ArrayList<>();
-            if(!adoptions.isEmpty()){
-                responseList = adoptions.stream().map(AdoptionResponse::new).collect(Collectors.toList());
-            }
+            List<AdoptionResponse> responseList = handleResponseList(adoptions);
             logger.info(SUCCESS_SEARCH_MESSAGE + " sending elements [responseListQuantity: {}] ", responseList.size());
 
             return generateResponse(SUCCESS_SEARCH_MESSAGE, responseList);
@@ -97,7 +113,6 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
         logger.info("CREATE ADOPTION - Create adoption process started for pet [petName: {}] and user [userId: {}]", requestDto.getPetDto().getName(), requestDto.getUserId());
 
         try{
-
             Pet pet = new Pet(requestDto.getPetDto());
             User user = userDao.findById(Long.parseLong(requestDto.getUserId()))
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));

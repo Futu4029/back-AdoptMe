@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +28,9 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public GeneralResponse getUserProfile(String id) {
@@ -44,5 +48,11 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
             logger.error("ERROR - Getting user profile failed for user: [userId: {}] [errorMessage: {}]", id, e.getMessage());
             throw new BusinessException("There was a problem getting the user for id: "+ id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public GeneralResponse createUser(User user) {
+        // Encriptar la contraseña
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return generateResponse(SUCCESS_MESSAGE, userDao.save(user));
     }
 }

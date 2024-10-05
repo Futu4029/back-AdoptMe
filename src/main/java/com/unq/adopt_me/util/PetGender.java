@@ -22,6 +22,6 @@ public enum PetGender {
                 return size;
             }
         }
-        throw new BusinessException("No gender found for parameter: " + name, HttpStatus.BAD_REQUEST);
+        return null;
     }
 }

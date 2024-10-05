@@ -15,7 +15,7 @@ import java.util.Random;
 
 @Service
 @Transactional
-public class PetInitializer implements Ordered {
+public class PetInitializer {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -89,8 +89,4 @@ public class PetInitializer implements Ordered {
         return new Random().nextInt(15) + 1; // Edad aleatoria entre 1 y 15 años
     }
 
-    @Override
-    public int getOrder() {
-        return 0;
-    }
 }
