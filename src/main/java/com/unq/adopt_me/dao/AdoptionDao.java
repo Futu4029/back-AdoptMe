@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface AdoptionDao extends JpaRepository<Adoption, UUID>, JpaSpecificationExecutor<Adoption> {
 
     List<Adoption> findAllByOwner_Id(Long owner_Id);
+    List<Adoption> findAllByOwnerEmail(String email);
     boolean existsByOwnerAndPet(User owner, Pet pet);
 
 }
