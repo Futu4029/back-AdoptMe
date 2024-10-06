@@ -5,15 +5,22 @@ public enum AdoptionStatus {
     PENDING("Pending"),
     APPROVED("Approved");
 
-    private final String value;
+    private final String displayName;
 
-    // Constructor
-    AdoptionStatus(String value) {
-        this.value = value;
+    AdoptionStatus(String displayName) {
+        this.displayName = displayName;
     }
 
-    // Getter para obtener el valor String
-    public String getValue() {
-        return value;
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public static AdoptionStatus getEnum(String name) {
+        for (AdoptionStatus value : AdoptionStatus.values()) {
+            if (value.name().equalsIgnoreCase(name)) {
+                return value;
+            }
+        }
+        return null;
     }
 }

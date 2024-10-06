@@ -32,8 +32,9 @@ public class AdoptionController {
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String age,
             @RequestParam(required = false) String size,
-            @RequestParam(required = false) String gender) {
-        return adoptionService.searchAdoption(type, age, size, gender);
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) String status) {
+        return adoptionService.searchAdoption(type, age, size, gender, status);
     }
 
     @PostMapping

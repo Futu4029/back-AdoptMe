@@ -57,7 +57,7 @@ public class ZAdoptionInitializer {
                 Adoption adoption = new Adoption();
                 adoption.setOwner(owner);
                 adoption.setPet(pet);
-                adoption.setStatus(AdoptionStatus.OPEN.getValue());
+                adoption.setStatus(AdoptionStatus.OPEN.getDisplayName());
 
                 // Aquí se espera que el owner adoptions se inicialice correctamente.
                 adoptionDao.save(adoption);
@@ -81,7 +81,7 @@ public class ZAdoptionInitializer {
 
                 adoption.setOwner(owner);
                 adoption.setPet(pet);
-                adoption.setStatus(AdoptionStatus.OPEN.getValue());
+                adoption.setStatus(AdoptionStatus.OPEN.getDisplayName());
 
                 adoptionDao.save(adoption);
                 logger.info("Adoption registered: " + adoption.getId());

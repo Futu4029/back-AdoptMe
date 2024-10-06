@@ -47,7 +47,7 @@ public class Adoption {
     public Adoption(Pet pet, User owner, AdoptionStatus adoptionStatus){
         this.pet = pet;
         this.owner = owner;
-        this.status = adoptionStatus.getValue();
+        this.status = adoptionStatus.getDisplayName();
         this.applications = List.of();
 
     }
