@@ -32,7 +32,7 @@ public class Pet {
     @NotNull
     private String gender;
     @NotNull
-    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
     @JsonIgnore
     private String image;
     @NotNull

@@ -23,4 +23,8 @@ public class SecurityController {
     public GeneralResponse login(@Valid @RequestBody LoginDto loginDto) {
         return securityService.validate(loginDto);
     }
+    @GetMapping("/isvalid")
+    public GeneralResponse isValidToken(@RequestHeader("Authorization") String authHeader) {
+        return securityService.isValid(authHeader);
+    }
 }

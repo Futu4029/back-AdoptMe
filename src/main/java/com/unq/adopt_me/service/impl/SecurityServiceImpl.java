@@ -6,7 +6,6 @@ import com.unq.adopt_me.dao.RoleDao;
 import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.dto.security.AuthResponse;
 import com.unq.adopt_me.dto.security.LoginDto;
-import com.unq.adopt_me.dto.user.UserResponse;
 import com.unq.adopt_me.security.JWTTokenProvider;
 import com.unq.adopt_me.service.SecurityService;
 import org.slf4j.Logger;
@@ -26,6 +25,8 @@ public class SecurityServiceImpl extends AbstractServiceResponse implements Secu
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
     public static final String SUCCESS_MESSAGE = "User logged successfully";
+    public static final String VALID_TOKEN_MESSAGE = "Token is valid";
+    public static final String INVALID_TOKEN_MESSAGE = "Token is invalid";
 
     private AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
@@ -52,5 +53,15 @@ public class SecurityServiceImpl extends AbstractServiceResponse implements Secu
 
         logger.info("SUCCESS - user successfully loged [email: {}]", loginDto.getEmail());
         return generateResponse(SUCCESS_MESSAGE, new AuthResponse(token));
+    }
+
+    @Override
+    public GeneralResponse isValid(String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Boolean isExpired = tokenProvider.isExpiredToken(token);
+        if(!isExpired){
+            return generateResponse(VALID_TOKEN_MESSAGE, isExpired);
+        }
+        return generateResponse(INVALID_TOKEN_MESSAGE, isExpired);
     }
 }

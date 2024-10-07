@@ -87,12 +87,12 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
     }
 
     @Override
-    public GeneralResponse searchAdoption(String type, String age, String size, String gender) {
-        logger.info("SEARCH ADOPTION - Searching adoptions with filter [type: {}] - [age: {}] - [size: {}] - [gender: {}]", type, age, size, gender);
+    public GeneralResponse searchAdoption(String type, String age, String size, String gender, String status) {
+        logger.info("SEARCH ADOPTION - Searching adoptions with filter [type: {}] - [age: {}] - [size: {}] - [gender: {}] - [status: {}]", type, age, size, gender, status);
         try {
             Pageable pageable = PageRequest.of(0, 50);
             // Get the specification based on the parameters
-            Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender);
+            Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender, status);
             List<Adoption> adoptions = adoptionDao.findAll(spec, pageable).getContent();
 
             List<AdoptionResponse> responseList = handleResponseList(adoptions);

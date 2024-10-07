@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -71,7 +70,7 @@ public class UserInitializer  {
         logger.info("Adopter registered: " + user.getEmail());
     }
     public void registerAdopter(String email, String name, String surName, String localities, String provinces, String password) {
-        Adopter user = new Adopter();
+        Owner user = new Owner();
         user.setEmail(email);
         user.setName(name);
         user.setSurName(surName);
