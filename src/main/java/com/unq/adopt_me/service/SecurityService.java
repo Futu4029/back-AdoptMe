@@ -9,4 +9,5 @@ public interface SecurityService {
 
 
     GeneralResponse validate(LoginDto loginDto);
+    GeneralResponse isValid(String authHeader);
 }

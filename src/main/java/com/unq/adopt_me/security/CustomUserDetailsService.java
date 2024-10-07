@@ -31,4 +31,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapToAuthorities(user.getRoles()));
     }
+        public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+        User user = userDao.findById(id).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapToAuthorities(user.getRoles()));
+    }
 }
