@@ -1,10 +1,12 @@
 package com.unq.adopt_me.util.filterhandler;
 
 import com.unq.adopt_me.entity.adoption.Adoption;
+import com.unq.adopt_me.security.CustomUserDetails;
 import com.unq.adopt_me.util.filterhandler.adoptionfilters.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -36,7 +38,9 @@ public class AdoptionFilterManager {
     public Predicate applyFilters(CriteriaBuilder cb, Root<Adoption> root, List<String> values) {
         this.predicate = cb.conjunction();
         values.forEach(value -> handlers.forEach(handler -> handleFilters(cb, root, predicate, value, handler)));
-        return predicate;
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //Evita traerme las adopciones del mismo owner.
+        return cb.and(predicate, cb.notEqual(root.get("owner").get("id"), customUserDetails.getUserId()));
     }
 
     public void handleFilters(CriteriaBuilder cb, Root<Adoption> root, Predicate predicate, String value, FilterHandler handler){
