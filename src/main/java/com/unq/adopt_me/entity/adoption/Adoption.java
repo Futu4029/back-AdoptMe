@@ -34,7 +34,7 @@ public class Adoption {
     @JoinColumn(name = "pet_id", referencedColumnName = "id", nullable = false)
     private Pet pet;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // Relación con User (Owner)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 

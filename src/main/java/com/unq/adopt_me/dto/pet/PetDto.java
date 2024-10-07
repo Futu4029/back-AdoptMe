@@ -35,11 +35,9 @@ public class PetDto {
     @NotNull(message = "El género es obligatorio")
     private String gender;
 
-    @NotNull(message = "La imágen es obligatoria")
     @NotBlank(message = "La imágen es obligatoria")
     private String image;
 
-    @NotNull(message = "La descripción es obligatoria")
     @NotBlank(message = "La descripción es obligatoria")
     private String description;
 

@@ -2,8 +2,6 @@ package com.unq.adopt_me.initializer;
 
 import com.unq.adopt_me.dao.RoleDao;
 import com.unq.adopt_me.entity.security.Role;
-import com.unq.adopt_me.entity.user.Adopter;
-import com.unq.adopt_me.entity.user.Owner;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.service.impl.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
@@ -44,10 +42,9 @@ public class UserInitializer  {
     private void startInitialization() {
         initializeRoles();
         for (int i = 0; i < emails.size(); i++) {
-            registerOwner();
-            registerAdopter();
+            registerUser();
         }
-        registerAdopter("test.user@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
+        registerUser("test.user@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
     }
 
     private void initializeRoles() {
@@ -55,22 +52,14 @@ public class UserInitializer  {
         roleDao.save(new Role("USER"));
     }
 
-    public void registerOwner() {
-        Owner user = new Owner();
-        setData(user);
-
-        userService.createUser(user);
-        logger.info("Owner registered: " + user.getEmail());
-    }
-
-    public void registerAdopter() {
-        Adopter user = new Adopter();
+    public void registerUser() {
+        User user = new User();
         setData(user);
         userService.createUser(user);
-        logger.info("Adopter registered: " + user.getEmail());
+        logger.info("User registered: " + user.getEmail());
     }
-    public void registerAdopter(String email, String name, String surName, String localities, String provinces, String password) {
-        Owner user = new Owner();
+    public void registerUser(String email, String name, String surName, String localities, String provinces, String password) {
+        User user = new User();
         user.setEmail(email);
         user.setName(name);
         user.setSurName(surName);
@@ -80,7 +69,7 @@ public class UserInitializer  {
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
 
         userService.createUser(user);
-        logger.info("Adopter registered: " + user.getEmail());
+        logger.info("User registered: " + user.getEmail());
     }
 
     private void setData(User user) {

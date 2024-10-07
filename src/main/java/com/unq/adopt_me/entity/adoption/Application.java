@@ -1,6 +1,6 @@
 package com.unq.adopt_me.entity.adoption;
 
-import com.unq.adopt_me.entity.user.Adopter;
+import com.unq.adopt_me.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,8 +14,8 @@ public class Application {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "adopter_id", nullable = false)
-    private Adopter adopter;  // Un adopter puede tener muchas applications
+    @JoinColumn(name = "user_id", nullable = false)
+    private User adopter;  // Un adopter puede tener muchas applications
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "adoption_id", nullable = false)
