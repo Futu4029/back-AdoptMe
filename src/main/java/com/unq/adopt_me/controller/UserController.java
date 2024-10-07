@@ -1,5 +1,6 @@
 package com.unq.adopt_me.controller;
 
+import com.unq.adopt_me.common.AbstractController;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.service.UserService;
 import com.unq.adopt_me.common.GeneralResponse;
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @ControllerAdvice
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends AbstractController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{email}")
-    public ResponseEntity<GeneralResponse> getUserProfile(@PathVariable("email")String email){
-        return ResponseEntity.ok(userService.getUserProfile(email));
+    @GetMapping
+    public ResponseEntity<GeneralResponse> getProfile(@RequestHeader("Authorization") String authHeader){
+        return ResponseEntity.ok(userService.getProfile(getIdFromToken(authHeader)));
     }
 
     @PostMapping("/register")

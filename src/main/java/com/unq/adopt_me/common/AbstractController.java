@@ -11,7 +11,9 @@ public class AbstractController {
 
     public Long getIdFromToken(String authHeader){
         String token = authHeader.replace("Bearer ", "");
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SecurityConstants.JWT_FIRMA).parseClaimsJws(token);
-        return (Long) claimsJws.getBody().get("userId");
+        return Long.valueOf((Integer) Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_FIRMA)
+                .parseClaimsJws(token)
+                .getBody().get("userId"));
     }
 }

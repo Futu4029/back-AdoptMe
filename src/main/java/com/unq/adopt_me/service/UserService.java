@@ -5,7 +5,7 @@ import com.unq.adopt_me.entity.user.User;
 
 public interface UserService {
 
-    GeneralResponse getUserProfile(String email);
+    GeneralResponse getProfile(Long id);
     GeneralResponse createUser(User user);
 
 }

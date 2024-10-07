@@ -51,10 +51,10 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
     private PetDao petDao;
 
     @Override
-    public GeneralResponse getAdoptionsByOwnerId(String ownerId) {
+    public GeneralResponse getAdoptionsByOwnerId(Long ownerId) {
         logger.info("GET ADOPTION - Getting adoptions by user: [ownerId: {}]", ownerId);
         try {
-            List<Adoption> adoptions = adoptionDao.findAllByOwner_Id(Long.parseLong(ownerId));
+            List<Adoption> adoptions = adoptionDao.findAllByOwner_Id(ownerId);
             List<AdoptionResponse> responseList = handleResponseList(adoptions);
 
             return generateResponse(SUCCESS_SEARCH_MESSAGE, responseList);
@@ -114,7 +114,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
         try{
             Pet pet = new Pet(requestDto.getPetDto());
-            User user = userDao.findById(Long.parseLong(requestDto.getUserId()))
+            User user = userDao.findById(requestDto.getUserId())
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
             Adoption adoption = new Adoption(pet, user, AdoptionStatus.OPEN);
             petDao.save(pet);

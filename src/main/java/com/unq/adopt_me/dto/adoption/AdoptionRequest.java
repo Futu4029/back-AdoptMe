@@ -14,8 +14,6 @@ public class AdoptionRequest {
     @Valid
     private PetDto petDto;
 
-    @NotNull(message = "No tiene un userId asociado")
-    @NotEmpty(message = "No tiene un userId asociado")
-    private String userId;
+    private Long userId;
 
 }

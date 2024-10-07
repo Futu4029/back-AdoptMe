@@ -33,20 +33,20 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public GeneralResponse getUserProfile(String id) {
+    public GeneralResponse getProfile(Long userId) {
         try{
-            logger.info("Getting user profile for user: [userId: {}]", id);
-            User user = userDao.findById(Long.parseLong(id))
+            logger.info("Getting user profile for user: [userId: {}]", userId);
+            User user = userDao.findById(userId)
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
 
-            logger.info("SUCCESS - user successfully retrieved for [userId: {}]", id);
+            logger.info("SUCCESS - user successfully retrieved for [userId: {}]", userId);
             return generateResponse(SUCCESS_MESSAGE, new UserResponse(user));
         }catch (BusinessException e){
-            logger.error("ERROR - Getting user profile failed for user: [userId: {}] [errorMessage: {}]", id, e.getMessage());
+            logger.error("ERROR - Getting user profile failed for user: [userId: {}] [errorMessage: {}]", userId, e.getMessage());
             throw new BusinessException(e.getMessage(), e.getHttpStatus());
         }catch (Exception e){
-            logger.error("ERROR - Getting user profile failed for user: [userId: {}] [errorMessage: {}]", id, e.getMessage());
-            throw new BusinessException("There was a problem getting the user for id: "+ id, HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("ERROR - Getting user profile failed for user: [userId: {}] [errorMessage: {}]", userId, e.getMessage());
+            throw new BusinessException("There was a problem getting the user for userId: "+ userId, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

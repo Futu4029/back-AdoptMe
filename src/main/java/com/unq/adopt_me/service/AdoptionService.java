@@ -5,7 +5,7 @@ import com.unq.adopt_me.dto.adoption.AdoptionRequest;
 
 public interface AdoptionService {
 
-    GeneralResponse getAdoptionsByOwnerId(String id);
+    GeneralResponse getAdoptionsByOwnerId(Long id);
     GeneralResponse getAdoptionsByEmail(String email);
     GeneralResponse searchAdoption(String type, String age, String size, String gender, String status);
     GeneralResponse createAdoption(AdoptionRequest requestDto);
