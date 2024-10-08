@@ -1,14 +1,10 @@
 package com.unq.adopt_me.common;
 
 import com.unq.adopt_me.security.SecurityConstants;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
-import java.util.Date;
-
 public class AbstractController {
-
+//Ver de recuperar el id desde el context.
     public Long getIdFromToken(String authHeader){
         String token = authHeader.replace("Bearer ", "");
         return Long.valueOf((Integer) Jwts.parser()

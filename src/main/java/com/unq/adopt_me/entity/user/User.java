@@ -37,6 +37,12 @@ public class User {
     @NotBlank
     private String province;
 
+    @NotNull
+    @Column(columnDefinition = "MEDIUMTEXT")
+    @JsonIgnore
+    private String image;
+
+    @JsonIgnore
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     @Pattern(regexp = ".*[A-Z].*", message = "La contraseña debe contener al menos una letra mayúscula")
     private String password;  // Campo para la contraseña

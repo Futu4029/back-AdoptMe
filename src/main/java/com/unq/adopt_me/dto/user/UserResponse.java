@@ -8,18 +8,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResponse {
 
-
-    private String email;
     private String name;
     private String surName;
     private String locality;
     private String province;
+    private Boolean livesOnHouse;
+    private Boolean isPropertyOwner;
+    private Boolean canHavePetsOnProperty;
+    private Boolean haveAnyPetsCastrated;
+    private String whatToDoIfHolydays;
+    private String whatToDoIfMoving;
+    private Boolean compromiseAccepted;
 
     public UserResponse(User user) {
-        this.email = user.getEmail();
         this.name = user.getName();
         this.surName = user.getSurName();
         this.locality = user.getLocality();
         this.province = user.getProvince();
+        this.livesOnHouse = user.getLivesOnHouse();
+        this.isPropertyOwner = user.getIsPropertyOwner();
+        this.canHavePetsOnProperty = user.getCanHavePetsOnProperty();
+        this.haveAnyPetsCastrated = user.getHaveAnyPetsCastrated();
+        this.whatToDoIfHolydays = user.getWhatToDoIfHolydays();
+        this.whatToDoIfMoving = user.getWhatToDoIfMoving();
+        this.compromiseAccepted = user.getCompromiseAccepted();
     }
 }

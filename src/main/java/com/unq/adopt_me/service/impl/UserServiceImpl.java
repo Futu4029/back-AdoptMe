@@ -1,6 +1,7 @@
 package com.unq.adopt_me.service.impl;
 
 import com.unq.adopt_me.common.AbstractServiceResponse;
+import com.unq.adopt_me.dao.RoleDao;
 import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.dto.user.UserResponse;
 import com.unq.adopt_me.entity.user.User;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -25,9 +28,13 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
 
     public static final String ERROR_MESSAGE = "There was a problem getting the user, user not found.";
     public static final String SUCCESS_MESSAGE = "User obtained successfully";
+    public static final String ADMIN = "ADMIN";
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -52,6 +59,7 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
 
     public GeneralResponse createUser(User user) {
         // Encriptar la contraseña
+        user.setRoles(Collections.singletonList(roleDao.findByName(ADMIN).get()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return generateResponse(SUCCESS_MESSAGE, userDao.save(user));
     }
