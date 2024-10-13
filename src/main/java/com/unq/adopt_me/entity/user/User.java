@@ -1,8 +1,7 @@
 package com.unq.adopt_me.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.unq.adopt_me.dto.security.UserRegistrationDto;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.security.Role;
@@ -106,5 +105,22 @@ public class User {
         this.whatToDoIfHolydays = whatToDoIfHolydays;
         this.whatToDoIfMoving = whatToDoIfMoving;
         this.compromiseAccepted = compromiseAccepted;
+    }
+    public User(UserRegistrationDto userRegistrationDto) {
+        this.email = userRegistrationDto.getEmail();
+        this.name = userRegistrationDto.getName();
+        this.surName = userRegistrationDto.getSurName();
+        this.locality = userRegistrationDto.getLocality();
+        this.province = userRegistrationDto.getProvince();
+        this.image = userRegistrationDto.getImage();
+        this.adoptions = new ArrayList<>();
+        this.applications = new ArrayList<>();
+        this.livesOnHouse = userRegistrationDto.getLivesOnHouse();
+        this.isPropertyOwner = userRegistrationDto.getIsPropertyOwner();
+        this.canHavePetsOnProperty = userRegistrationDto.getCanHavePetsOnProperty();
+        this.haveAnyPetsCastrated = userRegistrationDto.getHaveAnyPetsCastrated();
+        this.whatToDoIfHolydays = userRegistrationDto.getWhatToDoIfHolydays();
+        this.whatToDoIfMoving = userRegistrationDto.getWhatToDoIfMoving();
+        this.compromiseAccepted = userRegistrationDto.getCompromiseAccepted();
     }
 }
