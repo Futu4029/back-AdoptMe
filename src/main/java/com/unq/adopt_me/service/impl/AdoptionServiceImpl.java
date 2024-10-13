@@ -11,6 +11,7 @@ import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.pet.Pet;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.errorhandlers.BusinessException;
+import com.unq.adopt_me.security.CustomUserDetails;
 import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.util.AdoptionStatus;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -93,8 +95,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             Pageable pageable = PageRequest.of(0, 50);
             // Get the specification based on the parameters
             Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender, status);
-            List<Adoption> adoptions = adoptionDao.findAll(spec, pageable).getContent();
-
+            List<Adoption> adoptions = filterAdoptions(adoptionDao.findAll(spec, pageable).getContent());
             List<AdoptionResponse> responseList = handleResponseList(adoptions);
             logger.info(SUCCESS_SEARCH_MESSAGE + " sending elements [responseListQuantity: {}] ", responseList.size());
 
@@ -128,5 +129,12 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
             throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    public List<Adoption> filterAdoptions(List<Adoption> adoptionList){
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.findById(customUserDetails.getUserId()).orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+        return adoptionList.stream().filter(adoption -> !user.getBlackList().contains(adoption.getId())).toList();
     }
 }
