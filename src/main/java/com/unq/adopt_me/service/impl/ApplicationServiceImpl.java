@@ -5,7 +5,7 @@ import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.dao.AdoptionDao;
 import com.unq.adopt_me.dao.ApplicationDao;
 import com.unq.adopt_me.dao.UserDao;
-import com.unq.adopt_me.dto.adoption.ApplicationRequest;
+import com.unq.adopt_me.dto.adoption.AdoptionInteractionRequest;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.user.User;
@@ -30,6 +30,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
     private static final Logger logger = LoggerFactory.getLogger(AdoptionServiceImpl.class);
     public static final String ERROR_MESSAGE_APPLICATION = "There was a problem applying to the adoption.";
     public static final String SUCCESS_CREATION_MESSAGE = "Application successfully created";
+    public static final String SUCCESS_BLACKLIST_MESSAGE = "Application successfully blacklisted";
 
     @Autowired
     private AdoptionDao adoptionDao;
@@ -42,7 +43,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
     private ApplicationDao applicationDao;
 
     @Override
-    public GeneralResponse applyToAdoption(ApplicationRequest requestDto) {
+    public GeneralResponse applyToAdoption(AdoptionInteractionRequest requestDto) {
         logger.info("CREATE APPLICATION - Applying to adoption process started for userId [userId: {}] and adoption [adoptionId: {}]", requestDto.getUserId(), requestDto.getAdoptionId());
 
         try{
@@ -65,6 +66,28 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
         }catch (Exception e){
             logger.error("ERROR - Create applicationn failed [errorMessage: {}]", e.getMessage());
             throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public GeneralResponse blackListAdoption(AdoptionInteractionRequest requestDto) {
+        logger.info("BLACKLISTING AN ADOPTION - Blacklisting to adoption process started for userId [userId: {}] and adoption [adoptionId: {}]", requestDto.getUserId(), requestDto.getAdoptionId());
+
+        try{
+            User user = userDao.findById(requestDto.getUserId())
+                    .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+            user.getBlackList().add(requestDto.getAdoptionId());
+
+            userDao.save(user);
+
+            logger.info("BLACKLISTING AN ADOPTION - Blacklisting to adoption process was successful for userId [userId: {}] and adoption [adoptionId: {}]", requestDto.getUserId(), requestDto.getAdoptionId());
+            return generateResponse(SUCCESS_BLACKLIST_MESSAGE, null);
+        }catch (BusinessException e){
+            logger.error("ERROR - Blacklist adoption failed [errorMessage: {}]", e.getMessage());
+            throw new BusinessException(e.getMessage(), e.getHttpStatus());
+        }catch (Exception e){
+            logger.error("ERROR - Blacklist adoption failed [errorMessage: {}]", e.getMessage());
+            throw new BusinessException("There was a problem blacklisting the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

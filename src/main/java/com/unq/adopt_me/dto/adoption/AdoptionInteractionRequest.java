@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class ApplicationRequest {
+public class AdoptionInteractionRequest {
 
     @Valid
     private UUID adoptionId;

@@ -13,6 +13,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name="users")
@@ -59,6 +60,10 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;
+
+    @ElementCollection
+    @CollectionTable(name = "user_blacklist", joinColumns = @JoinColumn(name = "user_id"))
+    private List<UUID> blackList = new ArrayList<>();
 
     private Boolean livesOnHouse;
     private Boolean isPropertyOwner;
