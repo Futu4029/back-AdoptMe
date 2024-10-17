@@ -20,6 +20,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 import static com.unq.adopt_me.service.impl.UserServiceImpl.ERROR_MESSAGE;
 
 @Service
@@ -49,7 +51,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
         try{
             User user = userDao.findById(requestDto.getUserId())
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-            Adoption adoption = adoptionDao.findById(requestDto.getAdoptionId())
+            Adoption adoption = adoptionDao.findById(UUID.fromString(requestDto.getAdoptionId()))
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE_APPLICATION, HttpStatus.NOT_FOUND));
             Application application = new Application(adoption, user);
 
@@ -76,7 +78,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
         try{
             User user = userDao.findById(requestDto.getUserId())
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-            user.getBlackList().add(requestDto.getAdoptionId());
+            user.getBlackList().add(UUID.fromString(requestDto.getAdoptionId()));
 
             userDao.save(user);
 
