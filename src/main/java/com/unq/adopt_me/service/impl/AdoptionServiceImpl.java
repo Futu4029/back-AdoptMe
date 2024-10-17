@@ -2,6 +2,7 @@ package com.unq.adopt_me.service.impl;
 
 import com.unq.adopt_me.common.AbstractServiceResponse;
 import com.unq.adopt_me.dao.AdoptionDao;
+import com.unq.adopt_me.dao.ApplicationDao;
 import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.dao.specifications.AdoptionSpecifications;
@@ -51,6 +52,8 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
     @Autowired
     private PetDao petDao;
+    @Autowired
+    private ApplicationDao applicationDao;
 
     @Override
     public GeneralResponse getAdoptionsByOwnerId(Long ownerId) {
@@ -135,6 +138,9 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
     public List<Adoption> filterAdoptions(List<Adoption> adoptionList){
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.findById(customUserDetails.getUserId()).orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-        return adoptionList.stream().filter(adoption -> !user.getBlackList().contains(adoption.getId())).toList();
+        //Filtro por los blacklisteados
+        adoptionList.stream().filter(adoption -> !user.getBlackList().contains(adoption.getId())).toList();
+        //Filtro por los likeados
+        return adoptionList.stream().filter(adoption -> !applicationDao.existsApplicationByAdopterAndAdoption(user, adoption)).toList();
     }
 }
