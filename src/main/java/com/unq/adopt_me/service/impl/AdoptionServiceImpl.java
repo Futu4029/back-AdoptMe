@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -139,8 +140,8 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.findById(customUserDetails.getUserId()).orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
         //Filtro por los blacklisteados
-        adoptionList.stream().filter(adoption -> !user.getBlackList().contains(adoption.getId())).toList();
+        List<Adoption> filteredBlackList = adoptionList.stream().filter(adoption -> !user.getBlackList().contains(adoption.getId())).toList();
         //Filtro por los likeados
-        return adoptionList.stream().filter(adoption -> !applicationDao.existsApplicationByAdopterAndAdoption(user, adoption)).toList();
+        return filteredBlackList.stream().filter(adoption -> !applicationDao.existsApplicationByAdopterAndAdoption(user, adoption)).toList();
     }
 }
