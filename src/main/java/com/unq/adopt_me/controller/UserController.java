@@ -20,8 +20,8 @@ public class UserController extends AbstractController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<GeneralResponse> getProfile(@RequestHeader("Authorization") String authHeader){
-        return ResponseEntity.ok(userService.getProfile(getIdFromToken(authHeader)));
+    public GeneralResponse<GeneralResponse> getProfile(@RequestHeader("Authorization") String authHeader){
+        return userService.getProfile(getIdFromToken(authHeader));
     }
 
     @PostMapping("/register")
