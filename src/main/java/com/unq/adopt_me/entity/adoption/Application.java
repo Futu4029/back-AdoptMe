@@ -1,7 +1,7 @@
 package com.unq.adopt_me.entity.adoption;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unq.adopt_me.entity.user.User;
+import com.unq.adopt_me.util.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,12 +24,14 @@ public class Application {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "adoption_id", nullable = false)
-    @JsonIgnore
     private Adoption adoption;  // Una adopción puede tener muchas applications
 
-    public Application(Adoption adoption, User adopter) {
+    private ApplicationStatus applicationStatus;
+
+    public Application(Adoption adoption, User adopter, ApplicationStatus applicationStatus) {
         this.adoption = adoption;
         this.adopter = adopter;
+        this.applicationStatus = applicationStatus;
     }
 
     public Application() {

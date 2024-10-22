@@ -41,6 +41,7 @@ public class Adoption {
     @NotBlank
     private String status;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "adoption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;  // Relación con múltiples aplicaciones
 

@@ -31,4 +31,14 @@ public class ApplicationController extends AbstractController {
         requestDto.setUserId(getIdFromToken(authHeader));
         return applicationService.blackListAdoption(requestDto);
     }
+
+    @GetMapping()
+    public GeneralResponse getApplicationsByUserId(@RequestHeader("Authorization") String authHeader) {
+        return applicationService.getApplicationByUserId(getIdFromToken(authHeader));
+    }
+
+    @GetMapping("/adoption")
+    public GeneralResponse getApplicationsByAdoption(@Valid @RequestBody AdoptionInteractionRequest requestDto) {
+        return applicationService.getApplicationByAdoption(requestDto);
+    }
 }
