@@ -12,6 +12,7 @@ public class UserResponse {
     private String surName;
     private String locality;
     private String province;
+    private String image;
     private Boolean livesOnHouse;
     private Boolean isPropertyOwner;
     private Boolean canHavePetsOnProperty;
@@ -25,6 +26,7 @@ public class UserResponse {
         this.surName = user.getSurName();
         this.locality = user.getLocality();
         this.province = user.getProvince();
+        this.image = user.getImage();
         this.livesOnHouse = user.getLivesOnHouse();
         this.isPropertyOwner = user.getIsPropertyOwner();
         this.canHavePetsOnProperty = user.getCanHavePetsOnProperty();
