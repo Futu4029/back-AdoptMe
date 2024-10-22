@@ -32,7 +32,7 @@ public class ApplicationController extends AbstractController {
         return applicationService.blackListAdoption(requestDto);
     }
 
-    @GetMapping()
+    @GetMapping("/user")
     public GeneralResponse getApplicationsByUserId(@RequestHeader("Authorization") String authHeader) {
         return applicationService.getApplicationByUserId(getIdFromToken(authHeader));
     }
