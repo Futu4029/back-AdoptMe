@@ -37,8 +37,8 @@ public class ApplicationController extends AbstractController {
         return applicationService.getApplicationByUserId(getIdFromToken(authHeader));
     }
 
-    @GetMapping("/adoption")
-    public GeneralResponse getApplicationsByAdoption(@Valid @RequestBody AdoptionInteractionRequest requestDto) {
+    @GetMapping("/adoption/{requestDto}")
+    public GeneralResponse getApplicationsByAdoption(@PathVariable String requestDto) {
         return applicationService.getApplicationByAdoption(requestDto);
     }
 }

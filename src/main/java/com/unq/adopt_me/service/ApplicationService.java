@@ -10,6 +10,6 @@ public interface ApplicationService {
     GeneralResponse applyToAdoption(AdoptionInteractionRequest requestDto);
     GeneralResponse blackListAdoption(AdoptionInteractionRequest requestDto);
     GeneralResponse getApplicationByUserId(Long userId);
-    GeneralResponse getApplicationByAdoption(AdoptionInteractionRequest adoptionInteractionRequest);
+    GeneralResponse getApplicationByAdoption(String adoptionInteractionRequest);
 
 }

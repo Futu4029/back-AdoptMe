@@ -120,16 +120,16 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
     }
 
     @Override
-    public GeneralResponse getApplicationByAdoption(AdoptionInteractionRequest adoptionInteractionRequest) {
-        logger.info("GETTING APPLICATIONS BY ADOPTION - Getting applications by [adoptionId: {}]", adoptionInteractionRequest.getAdoptionId());
+    public GeneralResponse getApplicationByAdoption(String adoptionInteractionRequest) {
+        logger.info("GETTING APPLICATIONS BY ADOPTION - Getting applications by [adoptionId: {}]", adoptionInteractionRequest);
         try{
-            Adoption adoption = adoptionDao.findById(UUID.fromString(adoptionInteractionRequest.getAdoptionId()))
+            Adoption adoption = adoptionDao.findById(UUID.fromString(adoptionInteractionRequest))
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
             List<Application> applicationList = applicationDao.getApplicationsByAdoption(adoption);
 
             List<ApplicationDto> applicationDtoResponse = applicationList.stream().map(ApplicationDto::new).toList();
 
-            logger.info("GETTING APPLICATIONS BY ADOPTION - Applications obtained successfully [adoptionId: {}] found: [applicationQuantity: {}]", adoptionInteractionRequest.getAdoptionId(), applicationList.size());
+            logger.info("GETTING APPLICATIONS BY ADOPTION - Applications obtained successfully [adoptionId: {}] found: [applicationQuantity: {}]", adoptionInteractionRequest, applicationList.size());
             return generateResponse(SUCCESS_GET_MESSAGE, applicationDtoResponse);
         }catch (BusinessException e){
             logger.error(ERROR_GETTING_APPLICATION_FAILED_ERROR_MESSAGE, e.getMessage());
