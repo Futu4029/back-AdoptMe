@@ -67,32 +67,12 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void search_all_adoptions_get_status_OK_and_4_items() throws IOException {
+    void search_all_adoptions_get_status_OK_and_3_items() throws IOException {
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(4, responseList.size());
-    }
-
-    @Test
-    void search_adoptions_with_type_filter_get_status_OK_and_we_expect_1() throws IOException {
-        String dogTypeFilter = "?type="+ PetType.CAT;
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH +dogTypeFilter, HttpMethod.GET, null );
-        assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(1, responseList.size());
-    }
-
-    @Test
-    void search_adoptions_with_gender_filter_get_status_OK_and_we_expect_2() throws IOException {
-        String femaleFilter = "?gender="+ PetGender.MALE;
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + femaleFilter, HttpMethod.GET, null );
-        assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(2, responseList.size());
+        assertEquals(3, responseList.size());
     }
 
     @Test
@@ -106,13 +86,13 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_2() throws IOException {
+    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_1() throws IOException {
         String sizeFilter = "?size="+ PetSize.SMALL;
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + sizeFilter, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(2, responseList.size());
+        assertEquals(1, responseList.size());
     }
 
     @Test

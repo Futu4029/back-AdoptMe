@@ -62,7 +62,7 @@ public class User {
     @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_blacklist", joinColumns = @JoinColumn(name = "user_id"))
     private List<UUID> blackList = new ArrayList<>();
 
@@ -76,10 +76,11 @@ public class User {
 
     public User (){}
 
-    public User(String email, String name, String telefono, String surName, String locality, String province) {
+    public User(String email, String name, String telefono, String surName, String locality, String province, String image) {
         this.email = email;
         this.name = name;
         this.telefono = telefono;
+        this.image = image;
         this.surName = surName;
         this.locality = locality;
         this.province = province;
@@ -94,11 +95,10 @@ public class User {
         this.province = province;
         this.adoptions = adoptionList;
     }
-    public User(String email, String name, String telefono, String surName, String locality, String province, List<Adoption> adoptionList, List<Application> applications, Boolean livesOnHouse, Boolean isPropertyOwner, Boolean canHavePetsOnProperty, Boolean haveAnyPetsCastrated, String whatToDoIfHolydays, String whatToDoIfMoving, Boolean compromiseAccepted) {
+    public User(String email, String name, String surName, String locality, String province, List<Adoption> adoptionList, List<Application> applications, Boolean livesOnHouse, Boolean isPropertyOwner, Boolean canHavePetsOnProperty, Boolean haveAnyPetsCastrated, String whatToDoIfHolydays, String whatToDoIfMoving, Boolean compromiseAccepted) {
         this.email = email;
         this.name = name;
         this.surName = surName;
-        this.telefono = telefono;
         this.locality = locality;
         this.province = province;
         this.adoptions = adoptionList;
