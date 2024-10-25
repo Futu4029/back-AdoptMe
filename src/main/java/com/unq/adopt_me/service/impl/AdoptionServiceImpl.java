@@ -146,7 +146,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
             User adopter = userDao.findById(requestDto.getAdopterId())
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-            applicationDao.existsApplicationByAdopterAndAdoption(adopter, adoption);
+            //applicationDao.existsApplicationByAdopterAndAdoption(adopter, adoption);
 
             if(requestDto.getStatus()){
                 adoption.setStatus(AdoptionStatus.APPROVED.getDisplayName());

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ApplicationDao extends JpaRepository<Application, Long>, JpaSpecificationExecutor<Application> {
     Boolean existsApplicationByAdopterAndAdoption(User adopter, Adoption adoption);
-    Application applicationByAdopterAndAdoption(User adopter, Adoption adoption);
+    //Application applicationByAdopterAndAdoption(User adopter, Adoption adoption);
     List<Application> getApplicationsByAdopter(User adopter);
     List<Application> getApplicationsByAdoption(Adoption adoption);
 }
