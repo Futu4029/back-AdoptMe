@@ -29,6 +29,8 @@ public class User {
     @NotBlank
     private String email;
     @NotBlank
+    private String telefono;
+    @NotBlank
     private String name;
     @NotBlank
     private String surName;
@@ -74,26 +76,29 @@ public class User {
 
     public User (){}
 
-    public User(String email, String name, String surName, String locality, String province) {
+    public User(String email, String name, String telefono, String surName, String locality, String province) {
         this.email = email;
         this.name = name;
+        this.telefono = telefono;
         this.surName = surName;
         this.locality = locality;
         this.province = province;
     }
 
-    public User(String email, String name, String surName, String locality, String province, List<Adoption> adoptionList) {
+    public User(String email, String name, String telefono, String surName, String locality, String province, List<Adoption> adoptionList) {
         this.email = email;
         this.name = name;
+        this.telefono = telefono;
         this.surName = surName;
         this.locality = locality;
         this.province = province;
         this.adoptions = adoptionList;
     }
-    public User(String email, String name, String surName, String locality, String province, List<Adoption> adoptionList, List<Application> applications, Boolean livesOnHouse, Boolean isPropertyOwner, Boolean canHavePetsOnProperty, Boolean haveAnyPetsCastrated, String whatToDoIfHolydays, String whatToDoIfMoving, Boolean compromiseAccepted) {
+    public User(String email, String name, String telefono, String surName, String locality, String province, List<Adoption> adoptionList, List<Application> applications, Boolean livesOnHouse, Boolean isPropertyOwner, Boolean canHavePetsOnProperty, Boolean haveAnyPetsCastrated, String whatToDoIfHolydays, String whatToDoIfMoving, Boolean compromiseAccepted) {
         this.email = email;
         this.name = name;
         this.surName = surName;
+        this.telefono = telefono;
         this.locality = locality;
         this.province = province;
         this.adoptions = adoptionList;
@@ -109,6 +114,7 @@ public class User {
     public User(UserRegistrationDto userRegistrationDto) {
         this.email = userRegistrationDto.getEmail();
         this.name = userRegistrationDto.getName();
+        this.telefono = userRegistrationDto.getTelefono();
         this.surName = userRegistrationDto.getSurName();
         this.locality = userRegistrationDto.getLocality();
         this.province = userRegistrationDto.getProvince();

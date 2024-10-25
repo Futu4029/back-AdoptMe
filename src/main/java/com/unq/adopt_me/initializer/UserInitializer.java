@@ -30,6 +30,7 @@ public class UserInitializer  {
 
     private final List<String> emails = List.of("juan.perez@gmail.com", "maria.lopez@gmail.com", "carlos.gomez@gmail.com", "laura.martinez@gmail.com", "fernando.diaz@gmail.com");
     private final List<String> names = List.of("Juan", "María", "Carlos", "Laura", "Fernando");
+    private final List<String> telefonos = List.of("1156930347", "1147859630", "1147852369", "1145236987", "1122336655");
     private final List<String> surNames = List.of("Pérez", "López", "Gómez", "Martínez", "Díaz");
     private final List<String> localities = List.of("Lanús", "Avellaneda", "Quilmes", "Berazategui", "Lomas de Zamora");
     private final List<String> provinces = List.of("Buenos Aires");
@@ -45,7 +46,7 @@ public class UserInitializer  {
         for (int i = 0; i < emails.size(); i++) {
             registerUser();
         }
-        registerUser("test.user@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
+        registerUser("test.user@gmail.com", "María","1144778855","López", "Quilmes", "Buenos Aires", PASS);
     }
 
     private void initializeRoles() {
@@ -59,10 +60,11 @@ public class UserInitializer  {
         userService.createUser(user);
         logger.info("User registered: " + user.getEmail());
     }
-    public void registerUser(String email, String name, String surName, String localities, String provinces, String password) {
+    public void registerUser(String email, String name,  String telefono, String surName, String localities, String provinces, String password) {
         User user = new User();
         user.setEmail(email);
         user.setName(name);
+        user.setTelefono(telefono);
         user.setSurName(surName);
         user.setLocality(localities);
         user.setProvince(provinces);
@@ -77,6 +79,7 @@ public class UserInitializer  {
     private void setData(User user) {
         user.setEmail(emails.get(getRandomIndex(emails.size())));
         user.setName(names.get(getRandomIndex(names.size())));
+        user.setTelefono(telefonos.get(getRandomIndex(telefonos.size())));
         user.setSurName(surNames.get(getRandomIndex(surNames.size())));
         user.setLocality(localities.get(getRandomIndex(localities.size())));
         user.setProvince(provinces.get(getRandomIndex(provinces.size())));

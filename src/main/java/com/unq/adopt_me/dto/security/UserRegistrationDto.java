@@ -21,6 +21,8 @@ public class UserRegistrationDto {
     @NotBlank
     private String name;
     @NotBlank
+    private String telefono;
+    @NotBlank
     private String surName;
     @NotBlank
     private String locality;

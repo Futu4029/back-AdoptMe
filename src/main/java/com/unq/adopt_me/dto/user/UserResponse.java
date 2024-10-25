@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class UserResponse {
 
     private String name;
+    private String telefono;
     private String surName;
     private String locality;
     private String province;
@@ -23,6 +24,7 @@ public class UserResponse {
 
     public UserResponse(User user) {
         this.name = user.getName();
+        this.telefono = user.getTelefono();
         this.surName = user.getSurName();
         this.locality = user.getLocality();
         this.province = user.getProvince();
