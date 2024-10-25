@@ -2,6 +2,7 @@ package com.unq.adopt_me.controller;
 
 import com.unq.adopt_me.common.AbstractController;
 import com.unq.adopt_me.dto.adoption.AdoptionRequest;
+import com.unq.adopt_me.dto.adoption.OwnerInteractionRequest;
 import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import jakarta.validation.Valid;
@@ -43,5 +44,10 @@ public class AdoptionController extends AbstractController {
                                           @RequestHeader("Authorization") String authHeader) {
         requestDto.setUserId(getIdFromToken(authHeader));
         return adoptionService.createAdoption(requestDto);
+    }
+
+    @PutMapping
+    public GeneralResponse ownerInteractionWithApplicants(@Valid @RequestBody OwnerInteractionRequest requestDto) {
+        return adoptionService.ownerInteractionWithApplicants(requestDto);
     }
 }

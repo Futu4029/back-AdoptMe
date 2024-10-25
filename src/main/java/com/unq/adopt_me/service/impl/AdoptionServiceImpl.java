@@ -8,6 +8,7 @@ import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.dao.specifications.AdoptionSpecifications;
 import com.unq.adopt_me.dto.adoption.AdoptionRequest;
 import com.unq.adopt_me.dto.adoption.AdoptionResponse;
+import com.unq.adopt_me.dto.adoption.OwnerInteractionRequest;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.pet.Pet;
 import com.unq.adopt_me.entity.user.User;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.unq.adopt_me.service.impl.UserServiceImpl.ERROR_MESSAGE;
@@ -126,6 +128,33 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             Adoption adoptionResponse = adoptionDao.save(adoption);
             logger.info("CREATE ADOPTION - Create adoption process was successful for pet [petName: {}] and user [userName: {}]", requestDto.getPetDto().getName(), user.getName());
             return generateResponse(SUCCESS_CREATION_MESSAGE, adoptionResponse);
+        }catch (BusinessException e){
+            logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
+            throw new BusinessException(e.getMessage(), e.getHttpStatus());
+        }catch (Exception e){
+            logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
+            throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public GeneralResponse ownerInteractionWithApplicants(OwnerInteractionRequest requestDto) {
+        logger.info("OWNER INTERACTION - Create adoption process started for pet [adoptionId: {}] and user [status: {}]", requestDto.getAdoptionId(), requestDto.getStatus());
+
+        try{
+            Adoption adoption = adoptionDao.findById(UUID.fromString(requestDto.getAdoptionId()))
+                    .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+            User adopter = userDao.findById(requestDto.getAdopterId())
+                    .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+            applicationDao.existsApplicationByAdopterAndAdoption(adopter, adoption);
+
+            if(requestDto.getStatus()){
+                adoption.setStatus(AdoptionStatus.APPROVED.getDisplayName());
+                adoptionDao.save(adoption);
+            }
+
+            logger.info("OWNER INTERACTION - Create adoption process was successful for pet [adoptionId: {}] and user [status: {}]", requestDto.getAdoptionId(), requestDto.getStatus());
+            return generateResponse(SUCCESS_CREATION_MESSAGE, null);
         }catch (BusinessException e){
             logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
             throw new BusinessException(e.getMessage(), e.getHttpStatus());
