@@ -84,7 +84,7 @@ public class UserInitializer  {
         }
         byte[] imageBytes = imageStream.readAllBytes();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);;
-        user.setImage(base64Image);
+        user.setImage("data:image/jpeg;base64,"+base64Image);
         user.setLivesOnHouse(true);
         user.setIsPropertyOwner(true);
         user.setCanHavePetsOnProperty(true);
