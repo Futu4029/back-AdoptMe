@@ -23,6 +23,11 @@ public class UserController extends AbstractController {
         return userService.getProfile(getIdFromToken(authHeader));
     }
 
+    @GetMapping("/{email}")
+    public GeneralResponse<GeneralResponse> getProfileWithEmail(@PathVariable String email){
+        return userService.getProfileByEmail(email);
+    }
+
     @PostMapping("/register")
     public GeneralResponse registerUser(@Valid @RequestBody User user) {
         return userService.createUser(user);

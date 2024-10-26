@@ -9,5 +9,6 @@ public interface UserService {
     GeneralResponse getProfile(Long id);
     GeneralResponse createUser(User user);
     GeneralResponse registerUser(UserRegistrationDto userRegistrationDto);
+    GeneralResponse getProfileByEmail(String email);
 
 }

@@ -78,4 +78,22 @@ public class UserServiceImpl extends AbstractServiceResponse implements UserServ
             throw new BusinessException("There was a problem with registration", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public GeneralResponse getProfileByEmail(String email) {
+        try{
+            logger.info("Getting user profile for user: [email: {}]", email);
+            User user = userDao.findByEmail(email)
+                    .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+
+            logger.info("SUCCESS - user successfully retrieved for [email: {}]", email);
+            return generateResponse(SUCCESS_GET_USER_MESSAGE, new UserResponse(user));
+        }catch (BusinessException e){
+            logger.error("ERROR - Getting user profile failed for user: [email: {}] [errorMessage: {}]", email, e.getMessage());
+            throw new BusinessException(e.getMessage(), e.getHttpStatus());
+        }catch (Exception e){
+            logger.error("ERROR - Getting user profile failed for user: [email: {}] [errorMessage: {}]", email, e.getMessage());
+            throw new BusinessException("There was a problem getting the user for email: "+ email, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

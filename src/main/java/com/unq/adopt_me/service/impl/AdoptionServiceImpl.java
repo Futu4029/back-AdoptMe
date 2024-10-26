@@ -160,14 +160,14 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                 adopter.getBlackList().add(adoption.getId());
             }
 
-            logger.info("OWNER INTERACTION - Create adoption process was successful for pet [adoptionId: {}] and user [status: {}]", requestDto.getAdoptionId(), requestDto.getStatus());
+            logger.info("OWNER INTERACTION - Interacting with application process was successful for pet [adoptionId: {}] and user [adopterId: {}]", requestDto.getAdoptionId(), requestDto.getAdopterId());
             return generateResponse(SUCCESS_CREATION_MESSAGE, null);
         }catch (BusinessException e){
-            logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
+            logger.error("ERROR - Interacting with application failed [errorMessage: {}]", e.getMessage());
             throw new BusinessException(e.getMessage(), e.getHttpStatus());
         }catch (Exception e){
-            logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
-            throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("ERROR - Interacting with application [errorMessage: {}]", e.getMessage());
+            throw new BusinessException("There was a problem interacting with application", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
