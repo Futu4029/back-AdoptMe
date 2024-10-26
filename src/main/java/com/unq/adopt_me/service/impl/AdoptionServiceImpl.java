@@ -155,6 +155,10 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                 adoptionDao.save(adoption);
                 application.setApplicationStatus(ApplicationStatus.APPROVED);
                 applicationDao.save(application);
+                List<Application> applicationList = applicationDao.getApplicationsByAdoption(adoption);
+                applicationList.stream()
+                        .filter(applicationFromList -> !applicationFromList.equals(application))
+                        .forEach(applicationInList -> applicationDao.delete(applicationInList));
             }else{
                 applicationDao.delete(application);
                 adopter.getBlackList().add(adoption.getId());
