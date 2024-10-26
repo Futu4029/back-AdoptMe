@@ -10,6 +10,7 @@ import com.unq.adopt_me.dto.adoption.AdoptionRequest;
 import com.unq.adopt_me.dto.adoption.AdoptionResponse;
 import com.unq.adopt_me.dto.adoption.OwnerInteractionRequest;
 import com.unq.adopt_me.entity.adoption.Adoption;
+import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.pet.Pet;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.errorhandlers.BusinessException;
@@ -17,6 +18,7 @@ import com.unq.adopt_me.security.CustomUserDetails;
 import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.util.AdoptionStatus;
+import com.unq.adopt_me.util.ApplicationStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -146,11 +148,16 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
             User adopter = userDao.findById(requestDto.getAdopterId())
                     .orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-            //applicationDao.existsApplicationByAdopterAndAdoption(adopter, adoption);
+            Application application = applicationDao.getApplicationByAdopterAndAdoption(adopter, adoption);
 
             if(requestDto.getStatus()){
                 adoption.setStatus(AdoptionStatus.APPROVED.getDisplayName());
                 adoptionDao.save(adoption);
+                application.setApplicationStatus(ApplicationStatus.APPROVED);
+                applicationDao.save(application);
+            }else{
+                applicationDao.delete(application);
+                adopter.getBlackList().add(adoption.getId());
             }
 
             logger.info("OWNER INTERACTION - Create adoption process was successful for pet [adoptionId: {}] and user [status: {}]", requestDto.getAdoptionId(), requestDto.getStatus());
