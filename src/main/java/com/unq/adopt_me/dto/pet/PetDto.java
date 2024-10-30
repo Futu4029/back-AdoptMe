@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class PetDto {
@@ -36,12 +38,12 @@ public class PetDto {
     private String gender;
 
     @NotBlank(message = "La imágen es obligatoria")
-    private String image;
+    private List<@NotBlank(message = "Cada imagen debe tener un valor") String> images;
 
     @NotBlank(message = "La descripción es obligatoria")
     private String description;
 
-    public PetDto(String name, int age, String type, String size, String color, String breed, String gender, String image, String description) {
+    public PetDto(String name, int age, String type, String size, String color, String breed, String gender, List<String> images, String description) {
         this.name = name;
         this.age = age;
         this.type = type;
@@ -49,7 +51,7 @@ public class PetDto {
         this.color = color;
         this.breed = breed;
         this.gender = gender;
-        this.image = image;
+        this.images = images;
         this.description = description;
     }
 
@@ -62,7 +64,7 @@ public class PetDto {
         this.color = pet.getColor();
         this.breed = pet.getBreed();
         this.gender = pet.getGender();
-        this.image = pet.getImage();
+        this.images = pet.getImages();
         this.description = pet.getDescription();
     }
 }
