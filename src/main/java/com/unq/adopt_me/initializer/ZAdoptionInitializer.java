@@ -5,7 +5,6 @@ import com.unq.adopt_me.dao.PetDao;
 import com.unq.adopt_me.dao.UserDao;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.pet.Pet;
-import com.unq.adopt_me.entity.user.Owner;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.util.AdoptionStatus;
 import jakarta.annotation.PostConstruct;
@@ -46,7 +45,7 @@ public class ZAdoptionInitializer {
     }
 
     private void registerAdoptionForLoginGuy() {
-        Owner owner = (Owner) userDao.findByEmail("test.user@gmail.com").orElse(null);
+        User owner = userDao.findByEmail("test.user@gmail.com").orElse(null);
         Pet pet = petDao.findById(4L).orElse(null);
 
         if (owner != null && pet != null) {

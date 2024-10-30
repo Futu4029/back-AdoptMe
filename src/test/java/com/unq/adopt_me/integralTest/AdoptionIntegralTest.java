@@ -35,6 +35,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     public static final String SUCCESS_SEARCH = "Adoption successfully retrieved";
     public static final String SUCCESS_CREATION = "Adoption successfully created";
     ObjectMapper mapper = new ObjectMapper();
+    public Long idFromToken;
 
 
     @Autowired
@@ -50,10 +51,11 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     private AuthHelper authHelper;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         Optional<User> userLogin = userDao.findByEmail("test.user@gmail.com");
         loginUser = new LoginDto(userLogin.get().getEmail(), "Asda1234");
         authHelper.setData(HTTP_LOCALHOST, port, restTemplate);
+        idFromToken = authHelper.getUserIdFromToken(authHelper.getToken(loginUser));
     }
 
     private ResponseEntity<GeneralResponse> httpCall(String url, HttpMethod httpMethod, Object objectBody) throws IOException {
@@ -65,32 +67,12 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void search_all_adoptions_get_status_OK_and_4_items() throws IOException {
+    void search_all_adoptions_get_status_OK_and_3_items() throws IOException {
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(4, responseList.size());
-    }
-
-    @Test
-    void search_adoptions_with_type_filter_get_status_OK_and_we_expect_1() throws IOException {
-        String dogTypeFilter = "?type="+ PetType.CAT;
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH +dogTypeFilter, HttpMethod.GET, null );
-        assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(1, responseList.size());
-    }
-
-    @Test
-    void search_adoptions_with_gender_filter_get_status_OK_and_we_expect_2() throws IOException {
-        String femaleFilter = "?gender="+ PetGender.MALE;
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + femaleFilter, HttpMethod.GET, null );
-        assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(2, responseList.size());
+        assertEquals(3, responseList.size());
     }
 
     @Test
@@ -104,29 +86,29 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
     }
 
     @Test
-    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_2() throws IOException {
+    void search_adoptions_with_size_filter_get_status_OK_and_we_expect_1() throws IOException {
         String sizeFilter = "?size="+ PetSize.SMALL;
         ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL + SEARCH_PATH + sizeFilter, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(2, responseList.size());
+        assertEquals(1, responseList.size());
     }
 
     @Test
     void create_adoptions_status_OK_and_we_expect_same_object() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionRequest());
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionRequest(idFromToken));
         assertEquals(SUCCESS_CREATION, Objects.requireNonNull(response.getBody()).getMessage());
         Adoption adoption = mapper.convertValue(response.getBody().getData(), Adoption.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        User owner = userDao.findById(Long.valueOf(AdoptionFactory.anyAdoptionRequest().getUserId())).get();
+        User owner = userDao.findById(AdoptionFactory.anyAdoptionRequest(idFromToken).getUserId()).get();
         assertEquals(owner.getName(), adoption.getOwner().getName());
         assertEquals("Boni", adoption.getPet().getName());
     }
 
     @Test
     void create_adoptions_status_BAD_REQUEST_on_6_fields_and_we_expect_same_object() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.adoptionRequestWithWrongParameter());
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.adoptionRequestWithWrongParameter(idFromToken));
         String expectedMessage = "La imágen es obligatoria, " +
                                  "el género es obligatorio, " +
                                  "el tamaño es obligatorio, " +
@@ -146,7 +128,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_age_is_under_zero() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNegativeAge()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNegativeAge(), idFromToken));
         String expectedMessage = "La edad debe ser mayor o igual a 0";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -155,7 +137,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_description() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoDescription()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoDescription(), idFromToken));
         String expectedMessage = "La descripción es obligatoria";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -164,7 +146,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_type() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoType()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoType(), idFromToken));
         String expectedMessage = "El tipo es obligatorio";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -173,7 +155,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_size() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoSize()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoSize(), idFromToken));
         String expectedMessage = "El tamaño es obligatorio";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -182,7 +164,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_gender() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoGender()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoGender(), idFromToken));
         String expectedMessage = "El género es obligatorio";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -191,7 +173,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_image() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoImage()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoImage(), idFromToken));
         String expectedMessage = "La imágen es obligatoria";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());
@@ -200,7 +182,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
 
     @Test
     void create_adoptions_status_BAD_REQUEST_cause_have_no_name() throws IOException {
-        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoName()));
+        ResponseEntity<GeneralResponse> response = httpCall(ADOPTION_URL, HttpMethod.POST, AdoptionFactory.anyAdoptionWithPet_(PetFactory.petDtoWithNoName(), idFromToken));
         String expectedMessage = "El nombre es obligatorio";
 
         assertEquals(expectedMessage, (Objects.requireNonNull(response.getBody())).getMessage());

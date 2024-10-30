@@ -2,9 +2,8 @@ package com.unq.adopt_me.initializer;
 
 import com.unq.adopt_me.dao.RoleDao;
 import com.unq.adopt_me.entity.security.Role;
-import com.unq.adopt_me.entity.user.Adopter;
-import com.unq.adopt_me.entity.user.Owner;
 import com.unq.adopt_me.entity.user.User;
+import com.unq.adopt_me.initializer.utils.ImageUtils;
 import com.unq.adopt_me.service.impl.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -13,6 +12,12 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,22 +37,24 @@ public class UserInitializer  {
 
     private final List<String> emails = List.of("juan.perez@gmail.com", "maria.lopez@gmail.com", "carlos.gomez@gmail.com", "laura.martinez@gmail.com", "fernando.diaz@gmail.com");
     private final List<String> names = List.of("Juan", "María", "Carlos", "Laura", "Fernando");
+    private final List<String> telefonos = List.of("1156930347", "1147859630", "1147852369", "1145236987", "1122336655");
     private final List<String> surNames = List.of("Pérez", "López", "Gómez", "Martínez", "Díaz");
     private final List<String> localities = List.of("Lanús", "Avellaneda", "Quilmes", "Berazategui", "Lomas de Zamora");
     private final List<String> provinces = List.of("Buenos Aires");
 
+
     @PostConstruct
-    public void initialize() {
+    public void initialize() throws IOException {
         startInitialization();
     }
 
-    private void startInitialization() {
+    private void startInitialization() throws IOException {
         initializeRoles();
         for (int i = 0; i < emails.size(); i++) {
-            registerOwner();
-            registerAdopter();
+            registerUser();
         }
-        registerAdopter("test.user@gmail.com", "María","López", "Quilmes", "Buenos Aires", PASS);
+        registerUser("test.user@gmail.com", "María","1144778855","López", "Quilmes", "Buenos Aires", PASS, "profile1");
+        registerUser("adopter.user@gmail.com", "Cami","1144778855","Pesci", "Quilmes", "Buenos Aires", PASS, "profile2");
     }
 
     private void initializeRoles() {
@@ -55,41 +62,50 @@ public class UserInitializer  {
         roleDao.save(new Role("USER"));
     }
 
-    public void registerOwner() {
-        Owner user = new Owner();
-        setData(user);
-
-        userService.createUser(user);
-        logger.info("Owner registered: " + user.getEmail());
-    }
-
-    public void registerAdopter() {
-        Adopter user = new Adopter();
+    public void registerUser() {
+        User user = new User();
         setData(user);
         userService.createUser(user);
-        logger.info("Adopter registered: " + user.getEmail());
+        logger.info("User registered: " + user.getEmail());
     }
-    public void registerAdopter(String email, String name, String surName, String localities, String provinces, String password) {
-        Owner user = new Owner();
+    public void registerUser(String email, String name, String telefono, String surName, String localities, String provinces, String password, String imageRoute) throws IOException {
+        User user = new User();
         user.setEmail(email);
         user.setName(name);
+        user.setTelefono(telefono);
         user.setSurName(surName);
         user.setLocality(localities);
         user.setProvince(provinces);
         user.setPassword(password);
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
+        InputStream imageStream = getClass().getResourceAsStream("/images/"+imageRoute+".jpg");
+        if (imageStream == null) {
+            throw new IOException("Image file not found in classpath: /images/"+imageRoute+".jpg");
+        }
+        byte[] imageBytes = imageStream.readAllBytes();
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);;
+        user.setImage("data:image/jpeg;base64,"+base64Image);
+        user.setLivesOnHouse(true);
+        user.setIsPropertyOwner(true);
+        user.setCanHavePetsOnProperty(true);
+        user.setHaveAnyPetsCastrated(true);
+        user.setWhatToDoIfHolydays("Me lo llevo");
+        user.setWhatToDoIfMoving("Me lo llevo");
+        user.setCompromiseAccepted(true); // o el valor que corresponda
 
         userService.createUser(user);
-        logger.info("Adopter registered: " + user.getEmail());
+        logger.info("User registered: " + user.getEmail());
     }
 
     private void setData(User user) {
         user.setEmail(emails.get(getRandomIndex(emails.size())));
         user.setName(names.get(getRandomIndex(names.size())));
+        user.setTelefono(telefonos.get(getRandomIndex(telefonos.size())));
         user.setSurName(surNames.get(getRandomIndex(surNames.size())));
         user.setLocality(localities.get(getRandomIndex(localities.size())));
         user.setProvince(provinces.get(getRandomIndex(provinces.size())));
         user.setPassword(PASS);
+        user.setImage("");
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
     }
 

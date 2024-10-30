@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.dto.security.AuthResponse;
 import com.unq.adopt_me.dto.security.LoginDto;
+import com.unq.adopt_me.security.SecurityConstants;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
@@ -33,5 +35,12 @@ public class AuthHelper {
         ObjectMapper objectMapper = new ObjectMapper();
         AuthResponse authResponse = objectMapper.convertValue(response.getBody().getData(), AuthResponse.class);
         return authResponse.getAccesstoken();
+    }
+
+    protected Long getUserIdFromToken(String token) {
+        return Long.valueOf((Integer) Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_FIRMA)
+                .parseClaimsJws(token)
+                .getBody().get("userId"));
     }
 }

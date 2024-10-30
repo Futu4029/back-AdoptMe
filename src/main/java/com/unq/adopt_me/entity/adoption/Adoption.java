@@ -34,13 +34,14 @@ public class Adoption {
     @JoinColumn(name = "pet_id", referencedColumnName = "id", nullable = false)
     private Pet pet;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // Relación con User (Owner)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
     @NotBlank
     private String status;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "adoption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;  // Relación con múltiples aplicaciones
 

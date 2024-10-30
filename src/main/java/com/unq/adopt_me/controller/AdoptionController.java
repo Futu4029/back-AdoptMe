@@ -1,6 +1,8 @@
 package com.unq.adopt_me.controller;
 
+import com.unq.adopt_me.common.AbstractController;
 import com.unq.adopt_me.dto.adoption.AdoptionRequest;
+import com.unq.adopt_me.dto.adoption.OwnerInteractionRequest;
 import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import jakarta.validation.Valid;
@@ -12,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @ControllerAdvice
 @RequiredArgsConstructor
 @RequestMapping("/adoption")
-public class AdoptionController {
+public class AdoptionController extends AbstractController {
 
     @Autowired
     private AdoptionService adoptionService;
 
-    @GetMapping("/{ownerId}")
-    public GeneralResponse getAdoptionsByOwnerId(@PathVariable("ownerId") String ownerId){
-        return adoptionService.getAdoptionsByOwnerId(ownerId);
+    @GetMapping
+    public GeneralResponse getAdoptionsByOwnerId(@RequestHeader("Authorization") String authHeader){
+        return adoptionService.getAdoptionsByOwnerId(getIdFromToken(authHeader));
     }
 
     @GetMapping("/search/by-email/{email}")
@@ -38,7 +40,14 @@ public class AdoptionController {
     }
 
     @PostMapping
-    public GeneralResponse createAdoption(@Valid @RequestBody AdoptionRequest requestDto) {
+    public GeneralResponse createAdoption(@Valid @RequestBody AdoptionRequest requestDto,
+                                          @RequestHeader("Authorization") String authHeader) {
+        requestDto.setUserId(getIdFromToken(authHeader));
         return adoptionService.createAdoption(requestDto);
+    }
+
+    @PutMapping
+    public GeneralResponse ownerInteractionWithApplicants(@Valid @RequestBody OwnerInteractionRequest requestDto) {
+        return adoptionService.ownerInteractionWithApplicants(requestDto);
     }
 }

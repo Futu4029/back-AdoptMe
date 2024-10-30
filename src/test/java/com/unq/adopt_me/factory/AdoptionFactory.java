@@ -14,15 +14,15 @@ public class AdoptionFactory {
         return new Adoption(anyPet(), anyOwner(), AdoptionStatus.OPEN);
     }
 
-    public static AdoptionRequest anyAdoptionRequest(){
-        return new AdoptionRequest(anyPetDto(), "1");
+    public static AdoptionRequest anyAdoptionRequest(Long userId){
+        return new AdoptionRequest(anyPetDto(), userId);
     }
 
-    public static AdoptionRequest anyAdoptionWithPet_(PetDto petDto){
-        return new AdoptionRequest(petDto, "1");
+    public static AdoptionRequest anyAdoptionWithPet_(PetDto petDto,Long userId){
+        return new AdoptionRequest(petDto, userId);
     }
 
-    public static AdoptionRequest adoptionRequestWithWrongParameter(){
-        return new AdoptionRequest(petDtoWithInvalidatedValues(), "1");
+    public static AdoptionRequest adoptionRequestWithWrongParameter(Long userId){
+        return new AdoptionRequest(petDtoWithInvalidatedValues(), userId);
     }
 }
