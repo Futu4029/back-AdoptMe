@@ -44,7 +44,6 @@ public class Pet {
     @ElementCollection
     @CollectionTable(name = "pet_images", joinColumns = @JoinColumn(name = "pet_id"))
     @Column(name = "image_url", columnDefinition = "MEDIUMTEXT")
-    @NotNull
     private List<String> images;
 
     @NotNull
