@@ -39,6 +39,9 @@ public class User {
     @NotBlank
     private String province;
 
+    @Embedded
+    private Localization localization;
+
     @NotNull
     @Column(columnDefinition = "MEDIUMTEXT")
     @JsonIgnore

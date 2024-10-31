@@ -2,8 +2,8 @@ package com.unq.adopt_me.initializer;
 
 import com.unq.adopt_me.dao.RoleDao;
 import com.unq.adopt_me.entity.security.Role;
+import com.unq.adopt_me.entity.user.Localization;
 import com.unq.adopt_me.entity.user.User;
-import com.unq.adopt_me.initializer.utils.ImageUtils;
 import com.unq.adopt_me.service.impl.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -12,11 +12,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +72,7 @@ public class UserInitializer  {
         user.setTelefono(telefono);
         user.setSurName(surName);
         user.setLocality(localities);
+        user.setLocalization(new Localization("-34.7065325", "-58.2808325,17z"));
         user.setProvince(provinces);
         user.setPassword(password);
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
