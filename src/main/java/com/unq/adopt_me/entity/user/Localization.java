@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 public class Localization {
 
-    private String longitud;
-    private String latitud;
+    private String longitude;
+    private String latitude;
 
     public Localization(String longitud, String latitud) {
-        this.longitud = longitud;
-        this.latitud = latitud;
+        this.longitude = longitud;
+        this.latitude = latitud;
     }
 
     public Localization() {
