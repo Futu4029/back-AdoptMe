@@ -122,6 +122,7 @@ public class User {
         this.locality = userRegistrationDto.getLocality();
         this.province = userRegistrationDto.getProvince();
         this.image = userRegistrationDto.getImage();
+        this.localization = userRegistrationDto.getLocalization();
         this.adoptions = new ArrayList<>();
         this.applications = new ArrayList<>();
         this.livesOnHouse = userRegistrationDto.getLivesOnHouse();

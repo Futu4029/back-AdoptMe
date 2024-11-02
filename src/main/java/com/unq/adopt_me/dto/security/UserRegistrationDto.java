@@ -1,9 +1,9 @@
 package com.unq.adopt_me.dto.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.security.Role;
+import com.unq.adopt_me.entity.user.Localization;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -29,6 +29,7 @@ public class UserRegistrationDto {
     @NotBlank
     private String province;
 
+    private Localization localization;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String image;
