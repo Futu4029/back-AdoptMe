@@ -52,14 +52,30 @@ public class PetInitializer {
         );
         registerPet(
                 "Boni", 3, "Perro", "Grande", "Blanco", "Mestizo", "Macho",
-                List.of("assets/Boni.jpeg", "assets/Boni.jpeg"),
+                List.of("assets/Boni.jpeg", "assets/Boni2.jpeg",  "assets/Boni3.jpeg",  "assets/Boni4.jpeg"),
                 "¡Hey! Soy Boni, un perrito juguetón y lleno de amor..."
         );
         registerPet(
-                "Tomy", 7, "Gato", "Mediano", "Blanco", "Mestizo", "Macho",
-                List.of("assets/Tomy.jpeg"),
-                "Hola, soy Tomy, un gato independiente pero muy mimoso cuando agarro confianza..."
+                "Beni", 3, "Perro", "Chico", "Blanco", "Mestizo", "Macho",
+                List.of("assets/Beni.jpeg"),
+                "Hola, soy Beni, un perro independiente pero muy mimoso cuando agarro confianza..."
         );
+        registerPet(
+                "Manchita", 7, "Perro", "Mediano", "Blanco y Negro", "Mestizo", "Hembra",
+                List.of("assets/Manchita.jpeg"),
+                "Hola, soy Manchi"
+        );
+        registerPet(
+                "Tirry", 7, "Perro", "Mediano", "Blanco", "Caniche", "Macho",
+                List.of("assets/Tirry.jpeg"),
+                "Hola, soy Tirry"
+        );
+        registerPet(
+                "Tomy", 5, "Gato", "Mediano", "Blanco", "Mestizo", "Macho",
+                List.of("assets/Tomy.jpeg"),
+                "Hola, soy Tirry"
+        );
+
     }
 
     public void registerPetRandom(int i) {
