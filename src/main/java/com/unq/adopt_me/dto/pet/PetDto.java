@@ -1,10 +1,7 @@
 package com.unq.adopt_me.dto.pet;
 
 import com.unq.adopt_me.entity.pet.Pet;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +34,7 @@ public class PetDto {
     @NotNull(message = "El género es obligatorio")
     private String gender;
 
+    @NotEmpty(message = "La imágen es obligatoria")
     private List<String> images;
 
     @NotBlank(message = "La descripción es obligatoria")

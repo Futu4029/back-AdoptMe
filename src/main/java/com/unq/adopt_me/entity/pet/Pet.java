@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unq.adopt_me.dto.pet.PetDto;
 import com.unq.adopt_me.entity.adoption.Adoption;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ public class Pet {
     @ElementCollection
     @CollectionTable(name = "pet_images", joinColumns = @JoinColumn(name = "pet_id"))
     @Column(name = "image_url", columnDefinition = "MEDIUMTEXT")
+    @NotEmpty(message = "La imágen es obligatoria")
     private List<String> images;
 
     @NotNull

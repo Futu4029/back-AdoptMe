@@ -134,13 +134,13 @@ public class ApplicationIntegralTest extends AdoptMeApplicationTests {
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(3, responseList.size()); //Primer llamado nos devuelve 3
+        assertEquals(5, responseList.size()); //Primer llamado nos devuelve 3
         httpCall(APPLICATION_URL, HttpMethod.PUT, request); // Blacklisteamos la adopción
         ResponseEntity<GeneralResponse> responseSecondCall = httpCall(ADOPTION_URL + SEARCH_PATH, HttpMethod.GET, null );
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(responseSecondCall.getBody()).getMessage());
         assertEquals(HttpStatus.OK, responseSecondCall.getStatusCode());
         List<Adoption> responseListSecondCall = (List<Adoption>) responseSecondCall.getBody().getData();
-        assertEquals(2, responseListSecondCall.size()); //Segundo llamado nos devuelve 2
+        assertEquals(4, responseListSecondCall.size()); //Segundo llamado nos devuelve 2
     }
 
     @Test

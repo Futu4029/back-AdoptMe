@@ -135,7 +135,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             throw new BusinessException(e.getMessage(), e.getHttpStatus());
         }catch (Exception e){
             logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
-            throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(e.getMessage() == null ? "There was a problem creating the adoption" : e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
