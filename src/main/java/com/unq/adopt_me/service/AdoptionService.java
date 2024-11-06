@@ -8,7 +8,7 @@ public interface AdoptionService {
 
     GeneralResponse getAdoptionsByOwnerId(Long id);
     GeneralResponse getAdoptionsByEmail(String email);
-    GeneralResponse searchAdoption(String type, String age, String size, String gender, String status);
+    GeneralResponse searchAdoption(String type, String age, String size, String gender, String status, String distance);
     GeneralResponse createAdoption(AdoptionRequest requestDto);
     GeneralResponse ownerInteractionWithApplicants(OwnerInteractionRequest requestDto);
 }

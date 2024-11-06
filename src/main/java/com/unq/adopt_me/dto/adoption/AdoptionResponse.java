@@ -17,6 +17,7 @@ public class AdoptionResponse {
     private PetDto pet;
     private UserResponse owner;
     private String status;
+    private double distance;
 
     public AdoptionResponse(Adoption adoption) {
         this.id = adoption.getId();

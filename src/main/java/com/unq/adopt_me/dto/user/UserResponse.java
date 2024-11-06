@@ -1,5 +1,6 @@
 package com.unq.adopt_me.dto.user;
 
+import com.unq.adopt_me.entity.user.Localization;
 import com.unq.adopt_me.entity.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class UserResponse {
     private String whatToDoIfHolydays;
     private String whatToDoIfMoving;
     private Boolean compromiseAccepted;
+    private Localization localization;
 
     public UserResponse(User user) {
         this.name = user.getName();
@@ -36,5 +38,6 @@ public class UserResponse {
         this.whatToDoIfHolydays = user.getWhatToDoIfHolydays();
         this.whatToDoIfMoving = user.getWhatToDoIfMoving();
         this.compromiseAccepted = user.getCompromiseAccepted();
+        this.localization = user.getLocalization();
     }
 }

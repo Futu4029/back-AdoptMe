@@ -35,8 +35,9 @@ public class AdoptionController extends AbstractController {
             @RequestParam(required = false) String age,
             @RequestParam(required = false) String size,
             @RequestParam(required = false) String gender,
-            @RequestParam(required = false) String status) {
-        return adoptionService.searchAdoption(type, age, size, gender, status);
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String distance) {
+        return adoptionService.searchAdoption(type, age, size, gender, status, distance);
     }
 
     @PostMapping

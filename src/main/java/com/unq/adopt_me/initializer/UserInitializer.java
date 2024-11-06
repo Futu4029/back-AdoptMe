@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,9 @@ public class UserInitializer  {
     private final List<String> surNames = List.of("Pérez", "López", "Gómez", "Martínez", "Díaz");
     private final List<String> localities = List.of("Lanús", "Avellaneda", "Quilmes", "Berazategui", "Lomas de Zamora");
     private final List<String> provinces = List.of("Buenos Aires");
+    List<Localization> localizations = new ArrayList<>();
+
+
 
 
     @PostConstruct
@@ -47,11 +51,25 @@ public class UserInitializer  {
 
     private void startInitialization() throws IOException {
         initializeRoles();
+        initializeLocalizations();
         for (int i = 0; i < emails.size(); i++) {
             registerUser();
         }
         registerUser("test.user@gmail.com", "María","1144778855","López", "Quilmes", "Buenos Aires", PASS, "profile1");
         registerUser("adopter.user@gmail.com", "Cami","1144778855","Pesci", "Quilmes", "Buenos Aires", PASS, "profile2");
+    }
+
+    private void initializeLocalizations() {
+        localizations.add(new Localization(-34.6633,-58.3647));
+        localizations.add(new Localization(-34.7096,-58.3910));
+        localizations.add(new Localization(-34.7576,-58.4067));
+        localizations.add(new Localization(-34.7435,-58.3832));
+        localizations.add(new Localization(-34.7777,-58.3966));
+        localizations.add(new Localization(-34.7982,-58.3937));
+        localizations.add(new Localization(-34.8377,-58.3925));
+        localizations.add(new Localization(-34.7201,-58.2546));
+        localizations.add(new Localization(-34.7655,-58.2121));
+        localizations.add(new Localization(-34.7894,-58.2789));
     }
 
     private void initializeRoles() {
@@ -72,7 +90,7 @@ public class UserInitializer  {
         user.setTelefono(telefono);
         user.setSurName(surName);
         user.setLocality(localities);
-        user.setLocalization(new Localization("-34.7065325", "-58.2808325,17z"));
+        user.setLocalization(new Localization(-34.70628, -58.2778));
         user.setProvince(provinces);
         user.setPassword(password);
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
@@ -105,6 +123,7 @@ public class UserInitializer  {
         user.setPassword(PASS);
         user.setImage("");
         user.setRoles(Collections.singletonList(roleDao.findByName("ADMIN").isPresent() ? roleDao.findByName("ADMIN").get() : null));
+        user.setLocalization(localizations.get(getRandomIndex(localizations.size())));
     }
 
     private int getRandomIndex(int size) {
