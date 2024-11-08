@@ -1,6 +1,7 @@
 package com.unq.adopt_me.dao.specifications;
 
 import com.unq.adopt_me.entity.adoption.Adoption;
+import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.util.filterhandler.AdoptionFilterManager;
 import jakarta.persistence.criteria.*;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -25,8 +27,11 @@ public class AdoptionSpecifications {
             predicate = cb.and(predicate, cb.notEqual(root.get("owner").get("id"), user.getId()));
 
             //filtrado para todas las adopciones que esta en la blacklist
-            for (UUID uuid : user.getBlackList()){
-                predicate = cb.and(predicate, cb.notEqual(root.get("id"), uuid));
+            for (UUID blackListuuid : user.getBlackList()){
+                predicate = cb.and(predicate, cb.notEqual(root.get("id"), blackListuuid));
+            }
+            for (UUID likeListuuid : user.getApplications().stream().map(Application::getAdoption).map(Adoption::getId).toList()){
+                predicate = cb.and(predicate, cb.notEqual(root.get("id"), likeListuuid));
             }
             return predicate;
         };
