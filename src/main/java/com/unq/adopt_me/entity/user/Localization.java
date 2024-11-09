@@ -10,7 +10,7 @@ public class Localization {
     private Double longitude;
     private Double latitude;
 
-    public Localization(Double longitud, Double latitud) {
+    public Localization(Double latitud, Double longitud) {
         this.longitude = longitud;
         this.latitude = latitud;
     }
