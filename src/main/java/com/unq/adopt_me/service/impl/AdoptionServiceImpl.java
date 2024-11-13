@@ -1,5 +1,6 @@
 package com.unq.adopt_me.service.impl;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.unq.adopt_me.common.AbstractServiceResponse;
 import com.unq.adopt_me.dao.AdoptionDao;
 import com.unq.adopt_me.dao.ApplicationDao;
@@ -19,6 +20,7 @@ import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.util.AdoptionStatus;
 import com.unq.adopt_me.util.ApplicationStatus;
+import com.unq.adopt_me.util.geolocalization.GeoCalculator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -57,8 +59,12 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
     @Autowired
     private PetDao petDao;
+
     @Autowired
     private ApplicationDao applicationDao;
+
+    @Autowired
+    private GeoCalculator geoCalculator;
 
     @Override
     public GeneralResponse getAdoptionsByOwnerId(Long ownerId) {
@@ -91,20 +97,26 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
     private static List<AdoptionResponse> handleResponseList(List<Adoption> adoptions) {
         List<AdoptionResponse> responseList = new ArrayList<>();
         if(!adoptions.isEmpty()){
-            responseList = adoptions.stream().map(AdoptionResponse::new).collect(Collectors.toList());
+            responseList = adoptions.stream().map(AdoptionResponse::new).toList();
         }
         return responseList;
     }
 
     @Override
-    public GeneralResponse searchAdoption(String type, String age, String size, String gender, String status) {
-        logger.info("SEARCH ADOPTION - Searching adoptions with filter [type: {}] - [age: {}] - [size: {}] - [gender: {}] - [status: {}]", type, age, size, gender, status);
+    public GeneralResponse searchAdoption(String type, String age, String size, String gender, String status, String distance) {
+        logger.info("SEARCH ADOPTION - Searching adoptions with filter [type: {}] - [age: {}] - [size: {}] - [gender: {}] - [status: {}] - [distance: {}]", type, age, size, gender, status, distance);
         try {
             Pageable pageable = PageRequest.of(0, 50);
             // Get the specification based on the parameters
-            Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender, status);
-            List<Adoption> adoptions = filterAdoptions(adoptionDao.findAll(spec, pageable).getContent());
+            CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userDao.findById(customUserDetails.getUserId()).orElseThrow(()-> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
+            Specification<Adoption> spec = AdoptionSpecifications.withFilters(type, age, size, gender, status, user);
+            List<Adoption> adoptions = adoptionDao.findAll(spec, pageable).getContent();
+
             List<AdoptionResponse> responseList = handleResponseList(adoptions);
+
+            responseList = addAndFilterByDistance(responseList, distance, user);
+
             logger.info(SUCCESS_SEARCH_MESSAGE + " sending elements [responseListQuantity: {}] ", responseList.size());
 
             return generateResponse(SUCCESS_SEARCH_MESSAGE, responseList);
@@ -115,6 +127,20 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             logger.error("ERROR - Search adoption failed [errorMessage: {}]", e.getMessage());
             throw new BusinessException("There was a problem searching the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private List<AdoptionResponse> addAndFilterByDistance(List<AdoptionResponse> responseList, String distance, User user) {
+
+        responseList = responseList.stream().filter(adoptionResponse -> {
+            double distanceResponse = geoCalculator.calculateDistance(adoptionResponse.getOwner().getLocalization().getLatitude(),
+                                            adoptionResponse.getOwner().getLocalization().getLongitude(),
+                                            user.getLocalization().getLatitude(),
+                                            user.getLocalization().getLongitude());
+            adoptionResponse.setDistance(Math.round(distanceResponse * 100.0) / 100.0);
+            return StringUtil.notNullNorEmpty(distance) ? distanceResponse < Double.parseDouble(distance) : true;
+        }).toList();
+
+        return responseList;
     }
 
     @Override
@@ -135,7 +161,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             throw new BusinessException(e.getMessage(), e.getHttpStatus());
         }catch (Exception e){
             logger.error("ERROR - Create adoption failed [errorMessage: {}]", e.getMessage());
-            throw new BusinessException("There was a problem creating the adoption", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(e.getMessage() == null ? "There was a problem creating the adoption" : e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

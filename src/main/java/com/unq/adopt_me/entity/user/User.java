@@ -39,6 +39,9 @@ public class User {
     @NotBlank
     private String province;
 
+    @Embedded
+    private Localization localization;
+
     @NotNull
     @Column(columnDefinition = "MEDIUMTEXT")
     @JsonIgnore
@@ -119,6 +122,7 @@ public class User {
         this.locality = userRegistrationDto.getLocality();
         this.province = userRegistrationDto.getProvince();
         this.image = userRegistrationDto.getImage();
+        this.localization = userRegistrationDto.getLocalization();
         this.adoptions = new ArrayList<>();
         this.applications = new ArrayList<>();
         this.livesOnHouse = userRegistrationDto.getLivesOnHouse();

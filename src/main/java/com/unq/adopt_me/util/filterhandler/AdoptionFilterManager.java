@@ -36,11 +36,11 @@ public class AdoptionFilterManager {
     }
 
     public Predicate applyFilters(CriteriaBuilder cb, Root<Adoption> root, List<String> values) {
-        this.predicate = cb.conjunction();
+        predicate = cb.conjunction();
         values.forEach(value -> handlers.forEach(handler -> handleFilters(cb, root, predicate, value, handler)));
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //Evita traerme las adopciones del mismo owner.
-        return cb.and(predicate, cb.notEqual(root.get("owner").get("id"), customUserDetails.getUserId()));
+        return predicate;
     }
 
     public void handleFilters(CriteriaBuilder cb, Root<Adoption> root, Predicate predicate, String value, FilterHandler handler){

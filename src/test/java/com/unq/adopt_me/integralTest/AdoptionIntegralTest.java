@@ -72,7 +72,7 @@ public class AdoptionIntegralTest extends AdoptMeApplicationTests {
         assertEquals(SUCCESS_SEARCH, Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Adoption> responseList = (List<Adoption>) response.getBody().getData();
-        assertEquals(3, responseList.size());
+        assertEquals(5, responseList.size());
     }
 
     @Test

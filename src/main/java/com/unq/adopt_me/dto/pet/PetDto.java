@@ -1,12 +1,11 @@
 package com.unq.adopt_me.dto.pet;
 
 import com.unq.adopt_me.entity.pet.Pet;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,13 +34,13 @@ public class PetDto {
     @NotNull(message = "El género es obligatorio")
     private String gender;
 
-    @NotBlank(message = "La imágen es obligatoria")
-    private String image;
+    @NotEmpty(message = "La imágen es obligatoria")
+    private List<String> images;
 
     @NotBlank(message = "La descripción es obligatoria")
     private String description;
 
-    public PetDto(String name, int age, String type, String size, String color, String breed, String gender, String image, String description) {
+    public PetDto(String name, int age, String type, String size, String color, String breed, String gender, List<String> images, String description) {
         this.name = name;
         this.age = age;
         this.type = type;
@@ -49,7 +48,7 @@ public class PetDto {
         this.color = color;
         this.breed = breed;
         this.gender = gender;
-        this.image = image;
+        this.images = images;
         this.description = description;
     }
 
@@ -62,7 +61,7 @@ public class PetDto {
         this.color = pet.getColor();
         this.breed = pet.getBreed();
         this.gender = pet.getGender();
-        this.image = pet.getImage();
+        this.images = pet.getImages();
         this.description = pet.getDescription();
     }
 }
