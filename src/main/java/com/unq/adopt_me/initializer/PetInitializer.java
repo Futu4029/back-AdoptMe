@@ -56,7 +56,7 @@ public class PetInitializer {
                 "¡Hey! Soy Boni, un perrito juguetón y lleno de amor..."
         );
         registerPet(
-                "Beni", 3, "Perro", "Chico", "Blanco", "Mestizo", "Macho",
+                "Beni", 3, "Perro", "Pequeño", "Blanco", "Mestizo", "Macho",
                 List.of("assets/Beni.jpeg"),
                 "Hola, soy Beni, un perro independiente pero muy mimoso cuando agarro confianza..."
         );
