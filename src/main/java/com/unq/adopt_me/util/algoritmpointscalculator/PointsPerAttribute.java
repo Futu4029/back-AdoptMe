@@ -1,7 +1,7 @@
 package com.unq.adopt_me.util.algoritmpointscalculator;
 
 import com.unq.adopt_me.dto.adoption.AdoptionResponse;
-import com.unq.adopt_me.dto.user.UserDto;
+import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.util.PetSize;
 import com.unq.adopt_me.util.PetAge;
 
@@ -28,45 +28,42 @@ public enum PointsPerAttribute {
         return null;
     }
 
-    public static Integer calculateReturnPoints(AdoptionResponse adoptionResponse, UserDto userDto, PointsPerAttribute pointsPerAttribute) {
-        switch (pointsPerAttribute){
-            case DISTANCE:
-                double distance = Math.abs(adoptionResponse.getDistance()- userDto.getDistance());
-                if(distance < 20){
-                    return DISTANCE.maxPoints;
-                }else if(distance > 20 && distance < 50) {
-                    return DISTANCE.maxPoints / 2;
-                }else{
-                    return DISTANCE.minPoints;
-                }
-            case PET_AGE:
-                PetAge petAge = PetAge.getPetAgeFromAge(adoptionResponse.getPet().getAge());
-                return switch (petAge) {
-                    case ADULT -> PET_AGE.maxPoints;
-                    case YOUNG -> PET_AGE.maxPoints / 2;
-                    case PUPPY -> PET_AGE.minPoints;
-                };
-            case PET_SIZE:
-                PetSize petSize = PetSize.getEnum(adoptionResponse.getPet().getSize());
-                return calculatePetSizePoints(petSize, userDto);
-            default:
-                return 0;
+    public static Integer calculateReturnPoints(AdoptionResponse adoptionResponse, User user) {
+        Integer returnPoints = 0;
+        double distance = adoptionResponse.getDistance();
+        if(distance < 20){
+            returnPoints += DISTANCE.maxPoints;
+        }else if(distance > 20 && distance < 50) {
+            returnPoints +=  DISTANCE.maxPoints / 2;
+        }else{
+            returnPoints +=  DISTANCE.minPoints;
         }
+
+        PetAge petAge = PetAge.getPetAgeFromAge(adoptionResponse.getPet().getAge());
+        switch (petAge) {
+            case ADULT -> returnPoints += PET_AGE.maxPoints;
+            case YOUNG -> returnPoints += PET_AGE.maxPoints / 2;
+            case PUPPY -> returnPoints += PET_AGE.minPoints;
+            };
+
+        PetSize petSize = PetSize.getEnum(adoptionResponse.getPet().getSize());
+        returnPoints += calculatePetSizePoints(petSize, user);
+
+        return returnPoints;
     }
 
-    public static Integer calculatePetSizePoints(PetSize petSize, UserDto userDto) {
+    public static Integer calculatePetSizePoints(PetSize petSize, User user) {
         switch (petSize) {
             case SMALL:
                 return PET_SIZE.maxPoints;
-
             case MEDIUM:
-                if(userDto.getLivesOnHouse()){
+                if(user.getLivesOnHouse()){
                     return PET_SIZE.maxPoints;
                 }else {
                     return PET_SIZE.maxPoints / 2;
                 }
             case LARGE:
-                if(userDto.getLivesOnHouse()){
+                if(user.getLivesOnHouse()){
                     return PET_SIZE.maxPoints;
                 }else {
                     return PET_SIZE.minPoints;

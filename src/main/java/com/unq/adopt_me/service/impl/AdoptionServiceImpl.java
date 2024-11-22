@@ -121,9 +121,16 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
             responseList = addAndFilterByDistance(responseList, distance, user);
 
+
+            //generamos los puntos para cada adopción
             for (AdoptionResponse response : responseList) {
-                algoritmPointsCalculator.
+                algoritmPointsCalculator.calculateMatchPercentage(user, response);
             }
+
+            //reordenamos según el puntaje obtenido
+            responseList = responseList.stream()
+                    .sorted((a1, a2) -> Integer.compare(a2.getMatchPoints(), a1.getMatchPoints())) // Orden descendente
+                    .toList();
 
             logger.info(SUCCESS_SEARCH_MESSAGE + " sending elements [responseListQuantity: {}] ", responseList.size());
 
