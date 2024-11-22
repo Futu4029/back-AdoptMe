@@ -26,4 +26,7 @@ public enum PetSize {
         }
         return null;
     }
+
+    //agregar una forma para que devuelva el valor de 
+
 }

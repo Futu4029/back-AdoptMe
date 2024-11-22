@@ -28,6 +28,15 @@ public enum PetAge {
         return maxAge;
     }
 
+    public static PetAge getPetAgeFromAge(Integer age) {
+        for (PetAge petAge : PetAge.values()) {
+            if(petAge.getMinAge() <= age && age <= petAge.getMaxAge()) {
+                return petAge;
+            }
+        }
+        return null;
+    }
+
     public static PetAge getEnum(String name) {
         for (PetAge filter : com.unq.adopt_me.util.PetAge.values()) {
             if (filter.name().equalsIgnoreCase(name)) {
