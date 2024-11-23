@@ -8,8 +8,8 @@ import com.unq.adopt_me.util.PetAge;
 public enum PointsPerAttribute {
 
     DISTANCE(30,10),
-    PET_AGE(20, 10),
-    PET_SIZE(20,10);
+    PET_AGE(20, 5),
+    PET_SIZE(15,5);
 
     private final Integer maxPoints;
     private final Integer minPoints;
