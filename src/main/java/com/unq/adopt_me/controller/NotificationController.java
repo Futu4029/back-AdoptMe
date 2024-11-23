@@ -1,5 +1,6 @@
 package com.unq.adopt_me.controller;
 
+import com.unq.adopt_me.dto.notification.SubscriptionRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/notifications")
 public class NotificationController {
 
     @PostMapping("/save")
@@ -17,17 +18,4 @@ public class NotificationController {
         return ResponseEntity.ok("Token guardado correctamente");
     }
 
-    // Clase para modelar el token
-    public static class SubscriptionRequest {
-        private String token;
-
-        // Getters y setters
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-    }
 }
