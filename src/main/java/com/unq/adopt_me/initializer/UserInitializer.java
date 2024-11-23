@@ -101,10 +101,10 @@ public class UserInitializer  {
         byte[] imageBytes = imageStream.readAllBytes();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);;
         user.setImage("data:image/jpeg;base64,"+base64Image);
-        user.setLivesOnHouse(true);
-        user.setIsPropertyOwner(true);
-        user.setCanHavePetsOnProperty(true);
-        user.setHaveAnyPetsCastrated(true);
+        user.setLivesOnHouse(false);
+        user.setIsPropertyOwner(false);
+        user.setCanHavePetsOnProperty(false);
+        user.setHaveAnyPetsCastrated(false);
         user.setWhatToDoIfHolydays("Me lo llevo");
         user.setWhatToDoIfMoving("Me lo llevo");
         user.setCompromiseAccepted(true); // o el valor que corresponda
