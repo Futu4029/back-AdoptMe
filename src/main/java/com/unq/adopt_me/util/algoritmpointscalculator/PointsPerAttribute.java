@@ -1,21 +1,45 @@
 package com.unq.adopt_me.util.algoritmpointscalculator;
 
-import com.unq.adopt_me.dto.adoption.AdoptionResponse;
-import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.util.PetSize;
 import com.unq.adopt_me.util.PetAge;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static com.unq.adopt_me.util.PetAge.*;
+
 public enum PointsPerAttribute {
 
-    DISTANCE(30,10),
-    PET_AGE(20, 5),
-    PET_SIZE(15,5);
+    DISTANCE(30, 15 ,10),
+    PET_AGE(20, 10, 5),
+    PET_SIZE(15, 7,5);
 
     private final Integer maxPoints;
+    private final Integer midPoints;
     private final Integer minPoints;
 
-    PointsPerAttribute(Integer maxPoints, Integer minPoints) {
+    static final Map<Object, Integer> petAgeMap = new HashMap<>()
+    {
+        {
+            put(ADULT, PET_AGE.maxPoints);
+            put(YOUNG, PET_AGE.midPoints);
+            put(PUPPY, PET_AGE.minPoints);
+        }
+    };
+
+    static final Map<PetSize, Function<Boolean, Integer>> petSizeMap = new HashMap<>() {
+        {
+            put(PetSize.SMALL, livesOnHouse -> PointsPerAttribute.PET_SIZE.maxPoints);
+            put(PetSize.MEDIUM, livesOnHouse -> livesOnHouse ? PointsPerAttribute.PET_SIZE.maxPoints : PointsPerAttribute.PET_SIZE.midPoints);
+            put(PetSize.LARGE, livesOnHouse -> livesOnHouse ? PointsPerAttribute.PET_SIZE.maxPoints : PointsPerAttribute.PET_SIZE.minPoints);
+        }
+    };
+
+
+    PointsPerAttribute(Integer maxPoints, Integer midPoints, Integer minPoints) {
         this.maxPoints = maxPoints;
+        this.midPoints = midPoints;
         this.minPoints = minPoints;
     }
 
@@ -28,48 +52,21 @@ public enum PointsPerAttribute {
         return null;
     }
 
-    public static Integer calculateReturnPoints(AdoptionResponse adoptionResponse, User user) {
-        Integer returnPoints = 0;
-        double distance = adoptionResponse.getDistance();
+    public static Integer calculateDistancePoints(double distance) {
         if(distance < 20){
-            returnPoints += DISTANCE.maxPoints;
+            return DISTANCE.maxPoints;
         }else if(distance > 20 && distance < 50) {
-            returnPoints +=  DISTANCE.maxPoints / 2;
+            return DISTANCE.midPoints;
         }else{
-            returnPoints +=  DISTANCE.minPoints;
+            return DISTANCE.minPoints;
         }
-
-        PetAge petAge = PetAge.getPetAgeFromAge(adoptionResponse.getPet().getAge());
-        switch (petAge) {
-            case ADULT -> returnPoints += PET_AGE.maxPoints;
-            case YOUNG -> returnPoints += PET_AGE.maxPoints / 2;
-            case PUPPY -> returnPoints += PET_AGE.minPoints;
-            };
-
-        PetSize petSize = PetSize.getEnum(adoptionResponse.getPet().getSize());
-        returnPoints += calculatePetSizePoints(petSize, user);
-
-        return returnPoints;
     }
 
-    public static Integer calculatePetSizePoints(PetSize petSize, User user) {
-        switch (petSize) {
-            case SMALL:
-                return PET_SIZE.maxPoints;
-            case MEDIUM:
-                if(user.getLivesOnHouse()){
-                    return PET_SIZE.maxPoints;
-                }else {
-                    return PET_SIZE.maxPoints / 2;
-                }
-            case LARGE:
-                if(user.getLivesOnHouse()){
-                    return PET_SIZE.maxPoints;
-                }else {
-                    return PET_SIZE.minPoints;
-                }
-            default:
-                return PET_SIZE.minPoints;
-        }
+    public static Integer calculatePetAgePoints(PetAge petAge) {
+        return petAgeMap.get(petAge);
+    }
+
+    public static Integer calculatePetSizePoints(PetSize petSize, Boolean livesOnHouse) {
+        return petSizeMap.getOrDefault(petSize, house -> PointsPerAttribute.PET_SIZE.minPoints).apply(livesOnHouse);
     }
 }

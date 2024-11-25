@@ -20,7 +20,8 @@ import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.util.AdoptionStatus;
 import com.unq.adopt_me.util.ApplicationStatus;
-import com.unq.adopt_me.util.algoritmpointscalculator.AlgoritmPointsCalculator;
+import com.unq.adopt_me.util.algoritmpointscalculator.AdoptionPointsCalculator;
+import com.unq.adopt_me.util.algoritmpointscalculator.pointscalculator.PointsCalculator;
 import com.unq.adopt_me.util.geolocalization.GeoCalculator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.unq.adopt_me.service.impl.UserServiceImpl.ERROR_MESSAGE;
 
@@ -68,7 +67,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
     private GeoCalculator geoCalculator;
 
     @Autowired
-    private AlgoritmPointsCalculator algoritmPointsCalculator;
+    private AdoptionPointsCalculator adoptionPointsCalculator;
 
     @Override
     public GeneralResponse getAdoptionsByOwnerId(Long ownerId) {
@@ -124,7 +123,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
             //generamos los puntos para cada adopción
             for (AdoptionResponse response : responseList) {
-                algoritmPointsCalculator.calculateMatchPercentage(user, response);
+                adoptionPointsCalculator.calculatePoints(response, user);
             }
 
             //reordenamos según el puntaje obtenido
