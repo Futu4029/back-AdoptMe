@@ -4,6 +4,7 @@ import com.unq.adopt_me.common.AbstractServiceResponse;
 import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.dao.NotificationDao;
 import com.unq.adopt_me.dto.notification.SubscriptionRequest;
+import com.unq.adopt_me.entity.notification.NotificationCredentials;
 import com.unq.adopt_me.service.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +34,16 @@ public class NotificationServiceImpl extends AbstractServiceResponse implements 
     public void sendNotification(String message) {
         try {
             // Datos de la suscripción del cliente (debes recibirlos del frontend)
-            String endpoint = "https://fcm.googleapis.com/fcm/send/...";
-            String p256dh = "CLAVE_P256DH_DEL_CLIENTE";
-            String auth = "CLAVE_AUTH_DEL_CLIENTE";
+            NotificationCredentials notificationCredentialsData = notificationDao.findById(1L).orElseGet(null);
+            String endpoint = notificationCredentialsData.getEndpoint();
+            String p256dh = notificationCredentialsData.getKeys().getP256dh();
+            String auth = notificationCredentialsData.getKeys().getAuth();
 
             // Crear el payload
             Map<String, Object> payload = new HashMap<>();
             payload.put("title", "¡Hola desde el servidor!");
             payload.put("body", message);
-            payload.put("url", "https://tusitio.com");
+            payload.put("url", "http://127.0.0.1:4200/");
 
             // Convertir el payload a JSON usando Gson
             Gson gson = new Gson();
@@ -66,8 +68,8 @@ public class NotificationServiceImpl extends AbstractServiceResponse implements 
     }
 
     @Override
-    public GeneralResponse saveToken(SubscriptionRequest subscriptionRequest) {
-        notificationDao.save(new com.unq.adopt_me.entity.notification.Notification(subscriptionRequest.getEndpoint(),subscriptionRequest.getExpirationTime(), subscriptionRequest.getKeys()));
+    public GeneralResponse saveToken(SubscriptionRequest token) {
+        notificationDao.save(new NotificationCredentials(token.getToken().getEndpoint(), token.getToken().getExpirationTime(), token.getToken().getKeys()));
         logger.info("SAVING NOTIFICATION");
 
         return  generateResponse(SUCCESS_SAVE_NOTIFICATION, null);

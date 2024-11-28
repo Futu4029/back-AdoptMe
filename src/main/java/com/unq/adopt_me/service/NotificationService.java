@@ -5,6 +5,6 @@ import com.unq.adopt_me.dto.notification.SubscriptionRequest;
 
 public interface NotificationService {
 
-    GeneralResponse saveToken(SubscriptionRequest subscriptionRequest);
+    GeneralResponse saveToken(SubscriptionRequest token);
     void sendNotification(String message);
 }

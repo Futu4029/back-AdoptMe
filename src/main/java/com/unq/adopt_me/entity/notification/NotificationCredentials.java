@@ -6,15 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 
 @Table(name = "notification")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Notification {
+public class NotificationCredentials {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +23,7 @@ public class Notification {
     private Keys keys;
 
 
-    public Notification(String endpoint, String expirateionTime, Keys keys) {
+    public NotificationCredentials(String endpoint, String expirateionTime, Keys keys) {
         this.endpoint = endpoint;
         this.expirateionTime = expirateionTime;
         this.keys = keys;

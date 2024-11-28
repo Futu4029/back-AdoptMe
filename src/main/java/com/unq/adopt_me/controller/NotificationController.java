@@ -4,7 +4,6 @@ import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.dto.notification.SubscriptionRequest;
 import com.unq.adopt_me.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +17,8 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping("/save")
-    public GeneralResponse saveSubscription(@RequestBody SubscriptionRequest subscription) {
-        return notificationService.saveToken(subscription);
+    public GeneralResponse saveSubscription(@RequestBody SubscriptionRequest subscriptionRequest) {
+        return notificationService.saveToken(subscriptionRequest);
     }
 
 }
