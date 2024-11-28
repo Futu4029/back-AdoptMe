@@ -1,5 +1,10 @@
 package com.unq.adopt_me.dto.notification;
 
+import jakarta.persistence.Embeddable;
+import lombok.Data;
+
+@Embeddable
+@Data
 public class Keys {
     private String p256dh;
     private String auth;

@@ -12,6 +12,7 @@ import com.unq.adopt_me.entity.adoption.Application;
 import com.unq.adopt_me.entity.user.User;
 import com.unq.adopt_me.errorhandlers.BusinessException;
 import com.unq.adopt_me.service.ApplicationService;
+import com.unq.adopt_me.service.NotificationService;
 import com.unq.adopt_me.util.ApplicationStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ import static com.unq.adopt_me.service.impl.UserServiceImpl.ERROR_MESSAGE;
 @Transactional
 public class ApplicationServiceImpl extends AbstractServiceResponse implements ApplicationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdoptionServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationServiceImpl.class);
     public static final String ERROR_MESSAGE_APPLICATION = "There was a problem applying to the adoption.";
     public static final String SUCCESS_CREATION_MESSAGE = "Application successfully created";
     public static final String SUCCESS_BLACKLIST_MESSAGE = "Application successfully blacklisted";
@@ -46,6 +47,8 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private ApplicationDao applicationDao;
@@ -64,6 +67,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
             applicationDao.save(application);
 
             logger.info("CREATE APPLICATION - Applying to adoption process was successful for userId [userId: {}] and adoption [adoptionId: {}]", requestDto.getUserId(), requestDto.getAdoptionId());
+            notificationService.sendNotification("Applying to adoption process was successful for userId");
             return generateResponse(SUCCESS_CREATION_MESSAGE, null);
         }catch (BusinessException e){
             logger.error("ERROR - Create application failed [errorMessage: {}]", e.getMessage());
