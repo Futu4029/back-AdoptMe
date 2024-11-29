@@ -21,12 +21,14 @@ public class NotificationCredentials {
     private String expirateionTime;
     @Embedded
     private Keys keys;
+    private Long userId;
 
 
-    public NotificationCredentials(String endpoint, String expirateionTime, Keys keys) {
+    public NotificationCredentials(String endpoint, String expirateionTime, Keys keys, Long userId) {
         this.endpoint = endpoint;
         this.expirateionTime = expirateionTime;
         this.keys = keys;
+        this.userId = userId;
     }
 
 }

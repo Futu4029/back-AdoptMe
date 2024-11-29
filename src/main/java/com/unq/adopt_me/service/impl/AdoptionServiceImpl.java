@@ -18,6 +18,7 @@ import com.unq.adopt_me.errorhandlers.BusinessException;
 import com.unq.adopt_me.security.CustomUserDetails;
 import com.unq.adopt_me.service.AdoptionService;
 import com.unq.adopt_me.common.GeneralResponse;
+import com.unq.adopt_me.service.NotificationService;
 import com.unq.adopt_me.util.AdoptionStatus;
 import com.unq.adopt_me.util.ApplicationStatus;
 import com.unq.adopt_me.util.geolocalization.GeoCalculator;
@@ -65,6 +66,9 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
     @Autowired
     private GeoCalculator geoCalculator;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public GeneralResponse getAdoptionsByOwnerId(Long ownerId) {
@@ -185,6 +189,8 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                 applicationList.stream()
                         .filter(applicationFromList -> !applicationFromList.equals(application))
                         .forEach(applicationInList -> applicationDao.delete(applicationInList));
+                notificationService.sendNotification("Tu solicitud fué aceptada", adoption.getOwner().getId());
+
             }else{
                 applicationDao.delete(application);
                 adopter.getBlackList().add(adoption.getId());

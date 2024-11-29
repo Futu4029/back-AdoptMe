@@ -67,7 +67,7 @@ public class ApplicationServiceImpl extends AbstractServiceResponse implements A
             applicationDao.save(application);
 
             logger.info("CREATE APPLICATION - Applying to adoption process was successful for userId [userId: {}] and adoption [adoptionId: {}]", requestDto.getUserId(), requestDto.getAdoptionId());
-            notificationService.sendNotification("Applying to adoption process was successful for userId");
+            notificationService.sendNotification("Tu adopción sumó un like ;D", adoption.getOwner().getId());
             return generateResponse(SUCCESS_CREATION_MESSAGE, null);
         }catch (BusinessException e){
             logger.error("ERROR - Create application failed [errorMessage: {}]", e.getMessage());

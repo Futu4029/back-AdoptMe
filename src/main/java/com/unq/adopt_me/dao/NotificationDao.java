@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NotificationDao extends JpaRepository<NotificationCredentials, Long> {
+    NotificationCredentials findByUserId(Long userId);
 }
