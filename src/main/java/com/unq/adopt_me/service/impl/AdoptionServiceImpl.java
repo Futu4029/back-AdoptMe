@@ -21,6 +21,8 @@ import com.unq.adopt_me.common.GeneralResponse;
 import com.unq.adopt_me.service.NotificationService;
 import com.unq.adopt_me.util.AdoptionStatus;
 import com.unq.adopt_me.util.ApplicationStatus;
+import com.unq.adopt_me.util.algoritmpointscalculator.AdoptionPointsCalculator;
+import com.unq.adopt_me.util.algoritmpointscalculator.pointscalculator.PointsCalculator;
 import com.unq.adopt_me.util.geolocalization.GeoCalculator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,9 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
     @Autowired
     private GeoCalculator geoCalculator;
+
+    @Autowired
+    private AdoptionPointsCalculator adoptionPointsCalculator;
 
     @Autowired
     private NotificationService notificationService;
@@ -120,6 +125,17 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
             List<AdoptionResponse> responseList = handleResponseList(adoptions);
 
             responseList = addAndFilterByDistance(responseList, distance, user);
+
+
+            //generamos los puntos para cada adopción
+            for (AdoptionResponse response : responseList) {
+                adoptionPointsCalculator.calculatePoints(response, user);
+            }
+
+            //reordenamos según el puntaje obtenido
+            responseList = responseList.stream()
+                    .sorted((a1, a2) -> Integer.compare(a2.getMatchPoints(), a1.getMatchPoints())) // Orden descendente
+                    .toList();
 
             logger.info(SUCCESS_SEARCH_MESSAGE + " sending elements [responseListQuantity: {}] ", responseList.size());
 

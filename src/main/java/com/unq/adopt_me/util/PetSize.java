@@ -20,10 +20,13 @@ public enum PetSize {
 
     public static PetSize getEnum(String name) {
         for (PetSize size : PetSize.values()) {
-            if (size.name().equalsIgnoreCase(name)) {
+            if (size.name().equalsIgnoreCase(name) || size.displayName.equalsIgnoreCase(name)) {
                 return size;
             }
         }
         return null;
     }
+
+    //agregar una forma para que devuelva el valor de 
+
 }

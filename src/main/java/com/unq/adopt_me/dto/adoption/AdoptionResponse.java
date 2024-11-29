@@ -18,6 +18,7 @@ public class AdoptionResponse {
     private UserResponse owner;
     private String status;
     private double distance;
+    private Integer matchPoints;
 
     public AdoptionResponse(Adoption adoption) {
         this.id = adoption.getId();
