@@ -46,10 +46,12 @@ public class NotificationServiceImpl extends AbstractServiceResponse implements 
         try {
             // Datos de la suscripción del cliente (debes recibirlos del frontend)
             NotificationCredentials notificationCredentialsData = notificationDao.findByUserId(userId);
-            sendNotificationTo(message, notificationCredentialsData);
+            if(notificationCredentialsData != null){
+                sendNotificationTo(message, notificationCredentialsData);
+            }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("SENDING NOTIFICATION - Error sending notification with message [message: {}] - [errorMessage: {}]", message, e.getMessage());
         }
     }
 
