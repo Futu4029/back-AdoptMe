@@ -198,6 +198,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
 
             if(requestDto.getStatus()){
                 adoption.setStatus(AdoptionStatus.APPROVED.getDisplayName());
+                adoption.setAdopter(adopter);
                 adoptionDao.save(adoption);
                 application.setApplicationStatus(ApplicationStatus.APPROVED);
                 applicationDao.save(application);
@@ -205,7 +206,7 @@ public class AdoptionServiceImpl extends AbstractServiceResponse implements Adop
                 applicationList.stream()
                         .filter(applicationFromList -> !applicationFromList.equals(application))
                         .forEach(applicationInList -> applicationDao.delete(applicationInList));
-                notificationService.sendNotification("Tu solicitud fué aceptada", adoption.getOwner().getId());
+                notificationService.sendNotification("Tu solicitud fué aceptada", adoption.getAdopter().getId());
 
             }else{
                 applicationDao.delete(application);
