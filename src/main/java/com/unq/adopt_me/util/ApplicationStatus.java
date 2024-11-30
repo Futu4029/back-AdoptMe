@@ -1,9 +1,9 @@
 package com.unq.adopt_me.util;
 
 public enum ApplicationStatus {
-    DENIED("Denied"),
-    PENDING("Pending"),
-    APPROVED("Approved");
+    DENIED("Rechazado"),
+    PENDING("Pendiente"),
+    APPROVED("Aprobado");
 
     private final String displayName;
 

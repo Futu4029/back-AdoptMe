@@ -10,13 +10,13 @@ public class ApplicationDto {
 
     public AdoptionResponse adoption;
 
-    public ApplicationStatus applicationStatus;
+    public String applicationStatus;
 
     public User user;
 
     public ApplicationDto(Application application) {
         this.adoption = new AdoptionResponse(application.getAdoption());
-        this.applicationStatus = application.getApplicationStatus();
+        this.applicationStatus = application.getApplicationStatus().getDisplayName();
         this.user = application.getAdopter();
     }
 }
