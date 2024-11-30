@@ -84,8 +84,8 @@ public class NotificationServiceImpl extends AbstractServiceResponse implements 
     @Override
     public GeneralResponse saveToken(SubscriptionRequest token) {
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        notificationDao.save(new NotificationCredentials(token.getToken().getEndpoint(), token.getToken().getExpirationTime(), token.getToken().getKeys(), customUserDetails.getUserId()));
-        logger.info("SAVING NOTIFICATION");
+        notificationDao.upsert(token.getToken().getEndpoint(), token.getToken().getExpirationTime(), customUserDetails.getUserId(), token.getToken().getKeys().getP256dh(), token.getToken().getKeys().getAuth());
+        logger.info("SAVING NOTIFICATION - Saving notification for user [userId: {}]", customUserDetails.getUserId());
 
         return  generateResponse(SUCCESS_SAVE_NOTIFICATION, null);
     }

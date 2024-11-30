@@ -18,15 +18,16 @@ public class NotificationCredentials {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String endpoint;
-    private String expirateionTime;
+    private String expirationTime;
     @Embedded
     private Keys keys;
+    @Column(nullable = false, unique = true)
     private Long userId;
 
 
-    public NotificationCredentials(String endpoint, String expirateionTime, Keys keys, Long userId) {
+    public NotificationCredentials(String endpoint, String expirationTime, Keys keys, Long userId) {
         this.endpoint = endpoint;
-        this.expirateionTime = expirateionTime;
+        this.expirationTime = expirationTime;
         this.keys = keys;
         this.userId = userId;
     }
