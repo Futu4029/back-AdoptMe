@@ -48,7 +48,7 @@ public class PetInitializer {
         registerPet(
                 "Calu", 1, "Perro", "Mediano", "Chocolate", "Mestizo", "Hembra",
                 List.of("assets/Calu.jpeg", "assets/Calu2.jpeg" , "assets/Calu3.jpeg"),
-                "¡Hola! Soy Calu, un perrito lleno de energía y siempre con ganas de jugar..."
+                "¡Hola! Soy Calu, una perrita llena de energía y siempre con ganas de jugar..."
         );
         registerPet(
                 "Boni", 3, "Perro", "Grande", "Blanco", "Mestizo", "Macho",
@@ -62,18 +62,28 @@ public class PetInitializer {
         );
         registerPet(
                 "Manchita", 7, "Perro", "Mediano", "Blanco y Negro", "Mestizo", "Hembra",
-                List.of("assets/Manchita.jpeg"),
+                List.of("assets/Manchita.jpeg", "assets/Manchita2.jpeg", "assets/Manchita3.jpeg"),
                 "Hola, soy Manchi"
         );
         registerPet(
                 "Tirry", 7, "Perro", "Mediano", "Blanco", "Caniche", "Macho",
-                List.of("assets/Tirry.jpeg"),
-                "Hola, soy Tirry"
+                List.of("assets/Tirry.jpeg", "assets/Tirry2.jpeg"),
+                "Hola, soy Tirry "
         );
         registerPet(
                 "Tomy", 5, "Gato", "Mediano", "Blanco", "Mestizo", "Macho",
-                List.of("assets/Tomy.jpeg"),
-                "Hola, soy Tirry"
+                List.of("assets/Tomy.jpeg", "assets/Tomy2.jpeg", "assets/Tomy3.jpeg"),
+                "Hola, soy Tomy. Me llevo bien con perros y gatos"
+        );
+        registerPet(
+                "Samuel", 1, "Perro", "Grande", "Gris", "Mestizo", "Macho",
+                List.of("assets/Samuel.jpeg", "assets/Samuel2.jpeg", "assets/Samuel3.jpeg"),
+                "Hola, soy Samuek. Soy alegre, guardian y muy obediente, no me llevo con otros perros/gatos. Pero si me llevo con chicos"
+        );
+        registerPet(
+                "Tabby", 4, "Gato", "Chico", "Marron", "Mestizo", "Macho",
+                List.of("assets/Tabby1.jpeg", "assets/tabby2.jpeg", "assets/Tabby3.jpeg"),
+                "Hola, soy Tabby. Soy alegre, obediente, no me llevo con otros perros/gatos."
         );
 
     }

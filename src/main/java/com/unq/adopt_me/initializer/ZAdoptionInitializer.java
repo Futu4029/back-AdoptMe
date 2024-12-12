@@ -37,7 +37,7 @@ public class ZAdoptionInitializer {
     }
 
     private void startInitialization() {
-        for (int i = 1; i < 7; i++) {
+        for (int i = 1; i < 9; i++) {
             registerAdoption(Integer.toString(i));
         }
         registerAdoptionForLoginGuy();
@@ -46,7 +46,7 @@ public class ZAdoptionInitializer {
 
     private void registerAdoptionForLoginGuy() {
         User owner = userDao.findByEmail("test.user@gmail.com").orElse(null);
-        Pet pet = petDao.findById(7L).orElse(null);
+        Pet pet = petDao.findById(9L).orElse(null);
 
         if (owner != null && pet != null) {
             // Comprobar si ya existe una adopción con el mismo owner y pet

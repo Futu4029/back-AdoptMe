@@ -102,8 +102,8 @@ public class UserInitializer  {
         user.setIsPropertyOwner(false);
         user.setCanHavePetsOnProperty(false);
         user.setHaveAnyPetsCastrated(false);
-        user.setWhatToDoIfHolydays("Me lo llevo");
-        user.setWhatToDoIfMoving("Me lo llevo");
+        user.setWhatToDoIfHolydays("Me lo llevo o encuentro una guarderia");
+        user.setWhatToDoIfMoving("Busco un lugar que acepten mascotas");
         user.setCompromiseAccepted(true); // o el valor que corresponda
 
         userService.createUser(user);
