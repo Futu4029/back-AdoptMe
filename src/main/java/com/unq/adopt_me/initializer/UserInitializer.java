@@ -30,7 +30,7 @@ public class UserInitializer  {
     @Autowired
     private RoleDao roleDao;
 
-    private final List<String> emails = List.of("juan.perez@gmail.com", "maria.lopez@gmail.com", "carlos.gomez@gmail.com", "laura.martinez@gmail.com", "fernando.diaz@gmail.com");
+    private final List<String> emails = List.of("juan.perez@gmail.com", "maria.lopez@gmail.com", "carlos.gomez@gmail.com", "laura.martinez@gmail.com", "fernando.diaz@gmail.com","hector.larrea@gmail.com");
     private final List<String> names = List.of("Juan", "María", "Carlos", "Laura", "Fernando");
     private final List<String> telefonos = List.of("1156930347", "1147859630", "1147852369", "1145236987", "1122336655");
     private final List<String> surNames = List.of("Pérez", "López", "Gómez", "Martínez", "Díaz");
