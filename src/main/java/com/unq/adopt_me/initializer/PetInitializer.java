@@ -77,8 +77,8 @@ public class PetInitializer {
         );
         registerPet(
                 "Samuel", 1, "Perro", "Grande", "Gris", "Mestizo", "Macho",
-                List.of("assets/Samuel.jpeg", "assets/Samuel2.jpeg", "assets/Samuel3.jpeg"),
-                "Hola, soy Samuek. Soy alegre, guardian y muy obediente, no me llevo con otros perros/gatos. Pero si me llevo con chicos"
+                List.of("assets/Samuel1.jpeg", "assets/Samuel2.jpeg", "assets/Samuel3.jpeg"),
+                "Hola, soy Samuel. Soy alegre, guardian y muy obediente, no me llevo con otros perros/gatos. Pero si me llevo con chicos"
         );
         registerPet(
                 "Tabby", 4, "Gato", "Chico", "Marron", "Mestizo", "Macho",

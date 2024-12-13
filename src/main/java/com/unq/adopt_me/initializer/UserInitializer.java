@@ -52,7 +52,7 @@ public class UserInitializer  {
         for (int i = 0; i < emails.size(); i++) {
             registerUser();
         }
-        registerUser("test.user@gmail.com", "María","1144778855","López", "Quilmes", "Buenos Aires", PASS, "profile1");
+        registerUser("test.user@gmail.com", "María","1122446542","López", "Quilmes", "Buenos Aires", PASS, "profile1");
         registerUser("adopter.user@gmail.com", "Osvaldo","1144778855","Pesci", "Quilmes", "Buenos Aires", PASS, "profile2");
     }
 
